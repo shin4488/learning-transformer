@@ -31,9 +31,9 @@
 
 たとえば、ある人の健康診断の結果を「身長170cm、体重60kg」とまとめたとします。この2つの数をセットにして
 
-$$
+```math
 \mathbf{x} = \begin{pmatrix} 170 \\ 60 \end{pmatrix}
-$$
+```
 
 (読み下し: ベクトル $\mathbf{x}$ は、170 と 60 という2つの数を縦に並べたもの)
 
@@ -52,17 +52,15 @@ $$
 
 2つめの見方では、ベクトルは**矢印**です。2次元ベクトル $\mathbf{a} = (3,\ 2)$ を、「原点(0,0)から出発して、右に3、上に2だけ進む矢印」として絵に描くことができます。
 
-```text
-  y
-  2 |        o          <- 点 (3, 2)
-    |      /
-  1 |    /              ベクトル a = (3, 2)
-    |  /                「右に3、上に2」の矢印
-  0 +------------> x
-    0  1  2  3  4
+```mermaid
+xychart-beta
+    title "ベクトル a = (3, 2)"
+    x-axis "x" [0, 1, 2, 3]
+    y-axis "y" 0 --> 2
+    line [0, 0.667, 1.333, 2]
 ```
 
-(図: ベクトル $\mathbf{a} = (3,2)$ を矢印として描いたもの。原点から右に3、上に2進む)
+(図: 原点 (0,0) から点 (3,2) へ伸びる線分が、ベクトル $\mathbf{a} = (3,2)$ です。「右に3、上に2」という向きと長さを持ちます)
 
 矢印には「**向き**」と「**長さ**」があります。この幾何的なイメージこそが、このあと学ぶ「内積 = 類似度」という見方を支えます。
 
@@ -91,29 +89,24 @@ $$
 
 ### 2.2.1 足し算: 成分ごとに足すだけ
 
-$$
+```math
 \begin{pmatrix} 3 \\ 2 \end{pmatrix} + \begin{pmatrix} 1 \\ 2 \end{pmatrix} = \begin{pmatrix} 3+1 \\ 2+2 \end{pmatrix} = \begin{pmatrix} 4 \\ 4 \end{pmatrix}
-$$
+```
 
 (読み下し: ベクトルの足し算は、同じ位置の成分どうしを足すだけ。1番目どうし 3+1=4、2番目どうし 2+2=4)
 
 矢印として見ると、足し算は「**矢印をつなげて進む**」ことに対応します。
 
-```text
-  y
-  4 |           o       <- 到着点 (4, 4)。ここが和 a + b
-    |          /
-  3 |         /         b = (1, 2) の矢印でさらに進む
-    |        /
-  2 |        o          <- 中継点 (3, 2)
-    |      /
-  1 |    /              まず a = (3, 2) の矢印で進み…
-    |  /
-  0 +------------> x
-    0  1  2  3  4
+```mermaid
+xychart-beta
+    title "ベクトルの足し算 a + b = (4, 4)"
+    x-axis "x" [0, 1, 2, 3, 4]
+    y-axis "y" 0 --> 4
+    line [0, 0.667, 1.333, 2, 4]
+    line [0, 1, 2, 3, 4]
 ```
 
-(図: $\mathbf{a}+\mathbf{b}$ は「まず $\mathbf{a}$ の矢印で進み、続けて $\mathbf{b}$ の矢印で進む」こと。到着点が和のベクトル)
+(図: 途中で折れている線が「まず $\mathbf{a} = (3,2)$ で点 (3,2) まで進み、続けて $\mathbf{b} = (1,2)$ で進む」経路。まっすぐな線が、和 $\mathbf{a}+\mathbf{b} = (4,4)$ へ一直線に進む経路。どちらも同じ到着点 (4,4) にたどり着きます)
 
 Transformerの中では「単語の意味ベクトル + 位置の情報ベクトル」(第9章)や「元の入力 + 変換結果」(残差接続、第9章)のように、ベクトルの足し算が「**情報を合流させる**」操作として頻繁に登場します。
 
@@ -121,9 +114,9 @@ Transformerの中では「単語の意味ベクトル + 位置の情報ベクト
 
 ベクトルにスカラー(ただの数)を掛けることを **スカラー倍(scalar multiplication)** といいます。全成分にその数を掛けるだけです。
 
-$$
+```math
 2 \times \begin{pmatrix} 3 \\ 2 \end{pmatrix} = \begin{pmatrix} 6 \\ 4 \end{pmatrix}, \qquad 0.5 \times \begin{pmatrix} 3 \\ 2 \end{pmatrix} = \begin{pmatrix} 1.5 \\ 1 \end{pmatrix}
-$$
+```
 
 (読み下し: 2倍すれば各成分が2倍、0.5倍すれば各成分が半分になる)
 
@@ -133,9 +126,9 @@ $$
 
 **具体例(重み付き平均の先取り)**: $\mathbf{a} = (2,\ 0)$ に重み 0.8、 $\mathbf{b} = (0,\ 2)$ に重み 0.2 を付けて混ぜると、
 
-$$
+```math
 0.8\,\mathbf{a} + 0.2\,\mathbf{b} = \begin{pmatrix} 1.6 \\ 0 \end{pmatrix} + \begin{pmatrix} 0 \\ 0.4 \end{pmatrix} = \begin{pmatrix} 1.6 \\ 0.4 \end{pmatrix}
-$$
+```
 
 (読み下し: $\mathbf{a}$ を8割、 $\mathbf{b}$ を2割の配合で混ぜたベクトル。結果は $\mathbf{a}$ 寄りの位置になる)
 
@@ -489,9 +482,9 @@ Transformerの内部(Attention)では、シンプルで高速な**内積**がそ
 
 **行列(matrix)** とは、数を長方形の表の形に並べたものです。
 
-$$
+```math
 A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \\ 5 & 6 \end{pmatrix}
-$$
+```
 
 (読み下し: 行列 $A$ は、数を縦3段・横2列に並べた表)
 
@@ -508,10 +501,10 @@ $$
 
 $3 \times 2$ 行列は、「2次元の横ベクトルを3本、縦に積んだもの」と見ることができます。
 
-$$
+```math
 A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \\ 5 & 6 \end{pmatrix}
 = \begin{pmatrix} \text{— 1本目の行ベクトル } (1,2) \text{ —} \\ \text{— 2本目の行ベクトル } (3,4) \text{ —} \\ \text{— 3本目の行ベクトル } (5,6) \text{ —} \end{pmatrix}
-$$
+```
 
 (読み下し: 行列は「ベクトルの束」。各行が1本のベクトル)
 
@@ -525,9 +518,9 @@ $$
 
 行列とベクトルの掛け算を定義します。ここは手を動かすのがいちばんの近道です。
 
-$$
+```math
 \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} \begin{pmatrix} 5 \\ 6 \end{pmatrix} = \begin{pmatrix} 1 \times 5 + 2 \times 6 \\ 3 \times 5 + 4 \times 6 \end{pmatrix} = \begin{pmatrix} 17 \\ 39 \end{pmatrix}
-$$
+```
 
 (読み下し: 結果の1番目の成分は「行列の**1行目**とベクトルの内積」、2番目の成分は「**2行目**とベクトルの内積」)
 
@@ -553,9 +546,9 @@ $$
 
 **もう1つ具体例**($2 \times 3$ 行列 × 3次元ベクトル):
 
-$$
+```math
 \begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \end{pmatrix} \begin{pmatrix} 3 \\ 4 \\ 1 \end{pmatrix} = \begin{pmatrix} 1 \times 3 + 0 \times 4 + 2 \times 1 \\ 0 \times 3 + 1 \times 4 + (-1) \times 1 \end{pmatrix} = \begin{pmatrix} 5 \\ 3 \end{pmatrix}
-$$
+```
 
 (読み下し: 3次元ベクトルを入れると2次元ベクトルが出てきた。 $2 \times 3$ 行列は「3次元→2次元」の変換機械)
 
@@ -568,16 +561,16 @@ $$
 
 行列がベクトルを「変換」するとはどういうことか、2次元の例で目に見せます。使う行列は次の $R$ です。
 
-$$
+```math
 R = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}
-$$
+```
 
 この $R$ に、いくつかのベクトルを入れてみます。
 
-$$
+```math
 R \begin{pmatrix} 1 \\ 0 \end{pmatrix} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}, \qquad
 R \begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} -1 \\ 1 \end{pmatrix}
-$$
+```
 
 (読み下し: 「右向き」の矢印を入れると「上向き」が出てくる。「右上向き」を入れると「左上向き」が出てくる)
 
@@ -614,9 +607,9 @@ $$
 
 $2 \times 2$ どうしの例で、**4つの成分すべて**を手計算します。
 
-$$
+```math
 AB = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix}
-$$
+```
 
 (読み下し: 行列 $A$ と行列 $B$ の積を求める)
 
@@ -627,9 +620,9 @@ $$
 - 結果の (2行, 1列): $A$ の2行目 $(3,4)$ と $B$ の1列目 $(5,7)$ の内積 $= 3 \times 5 + 4 \times 7 = 43$
 - 結果の (2行, 2列): $A$ の2行目 $(3,4)$ と $B$ の2列目 $(6,8)$ の内積 $= 3 \times 6 + 4 \times 8 = 50$
 
-$$
+```math
 AB = \begin{pmatrix} 19 & 22 \\ 43 & 50 \end{pmatrix}
-$$
+```
 
 (読み下し: 結果も $2 \times 2$ 行列。各マスは「左の行、右の列、その内積」で埋まっている)
 
@@ -665,31 +658,31 @@ $$
 
 **具体例で検証**します。使う行列とベクトルは次のとおりです。
 
-$$
+```math
 A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}, \quad B = \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix}, \quad \mathbf{x} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}
-$$
+```
 
 **経路1: 2段階で変換**
 
 まず $B$ で変換すると、
 
-$$
+```math
 B\mathbf{x} = \begin{pmatrix} 5 \times 1 + 6 \times 1 \\ 7 \times 1 + 8 \times 1 \end{pmatrix} = \begin{pmatrix} 11 \\ 15 \end{pmatrix}
-$$
+```
 
 続けて、この結果を $A$ で変換すると、
 
-$$
+```math
 A \begin{pmatrix} 11 \\ 15 \end{pmatrix} = \begin{pmatrix} 1 \times 11 + 2 \times 15 \\ 3 \times 11 + 4 \times 15 \end{pmatrix} = \begin{pmatrix} 41 \\ 93 \end{pmatrix}
-$$
+```
 
 **経路2: 先に合成してから一発変換**
 
 さきほど計算した合成行列 $AB$(1行目が 19, 22、2行目が 43, 50)を使って、
 
-$$
+```math
 (AB)\mathbf{x} = \begin{pmatrix} 19 \times 1 + 22 \times 1 \\ 43 \times 1 + 50 \times 1 \end{pmatrix} = \begin{pmatrix} 41 \\ 93 \end{pmatrix}
-$$
+```
 
 (読み下し: 経路1と経路2の結果が $(41,\ 93)$ で完全に一致した)
 
@@ -707,9 +700,9 @@ graph LR
 
 なお、関数の合成と同じく、**行列積も順番を入れ替えると結果が変わります**($AB \neq BA$ が普通)。実際に逆順の $BA$ を計算すると、
 
-$$
+```math
 BA = \begin{pmatrix} 5 \times 1 + 6 \times 3 & 5 \times 2 + 6 \times 4 \\ 7 \times 1 + 8 \times 3 & 7 \times 2 + 8 \times 4 \end{pmatrix} = \begin{pmatrix} 23 & 34 \\ 31 & 46 \end{pmatrix}
-$$
+```
 
 となり、さきほど求めた $AB$(1行目が 19, 22、2行目が 43, 50)とは別物です。
 
@@ -721,11 +714,11 @@ $$
 
 **転置(てんち、transpose)** は、行列の行と列を入れ替える操作です。記号は右肩の $\top$ で、 $X^\top$(「エックス・転置」「エックス・トランスポーズ」)と読みます。
 
-$$
+```math
 X = \begin{pmatrix} 1 & 2 \\ 3 & 4 \\ 5 & 6 \end{pmatrix}
 \quad \Longrightarrow \quad
 X^\top = \begin{pmatrix} 1 & 3 & 5 \\ 2 & 4 & 6 \end{pmatrix}
-$$
+```
 
 (読み下し: $3 \times 2$ 行列を転置すると $2 \times 3$ 行列になる。元の1行目 $(1,2)$ が転置後の1列目に、元の2行目 $(3,4)$ が2列目に…と、行が列に生まれ変わる)
 
@@ -743,19 +736,19 @@ $$
 
 規則として、 $i$ 行 $j$ 列の成分が $j$ 行 $i$ 列に移ります。ベクトルも転置できます。縦ベクトルを転置すると横ベクトルになります。
 
-$$
+```math
 \mathbf{a} = \begin{pmatrix} 3 \\ 2 \end{pmatrix}
 \quad \Longrightarrow \quad
 \mathbf{a}^\top = (3, 2)
-$$
+```
 
 (読み下し: 縦に並んでいた 3 と 2 が、転置すると横並びになる)
 
 ここで、2.3.1節で予告した記法の約束を回収します。横ベクトル $\mathbf{a}^\top$(1×2)と縦ベクトル $\mathbf{b}$(2×1)の行列積を、行列のルールどおり計算すると、
 
-$$
+```math
 \mathbf{a}^\top \mathbf{b} = (3 \quad 2) \begin{pmatrix} 1 \\ 4 \end{pmatrix} = 3 \times 1 + 2 \times 4 = 11
-$$
+```
 
 (読み下し: 1×2 行列と 2×1 行列の積は 1×1、つまりただの数。そして中身は内積の計算と完全に同じ)
 
@@ -783,10 +776,10 @@ $$
 
 この5本の行ベクトルを、上から順に**縦に積み重ねる**と、 $5 \times 4$ の行列になります。
 
-$$
+```math
 X = \begin{pmatrix} 1 & 0 & 2 & -1 \\ 0 & 1 & 0 & 0 \\ 2 & 0 & 1 & -1 \\ 0 & 1 & 0 & 1 \\ 1 & 2 & 0 & 1 \end{pmatrix}
 \begin{matrix} \leftarrow \text{猫} \\ \leftarrow \text{は} \\ \leftarrow \text{魚} \\ \leftarrow \text{が} \\ \leftarrow \text{好き} \end{matrix}
-$$
+```
 
 (読み下し: 文「猫は魚が好き」の数値表現。 $i$ 行目が $i$ 番目のトークンのベクトル。行数 5 = トークン数 $n$ 、列数 4 = ベクトルの次元 $d_{\text{model}}$)
 

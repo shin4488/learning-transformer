@@ -280,10 +280,10 @@ $$
 
 数値例: 小さく $d_{\text{model}} = 2$ 、 $d_{\text{ff}} = 4$ で1トークン分を計算します。 $\mathbf{x} = (1,\ -1)$ 、バイアスは0、
 
-$$
+```math
 W_1 = \begin{pmatrix} 1 & 0 & 1 & 0 \\ 0 & 1 & 0 & 1 \end{pmatrix}, \qquad
 W_2 = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \\ 0 & 0 \end{pmatrix}
-$$
+```
 
 とします。
 
