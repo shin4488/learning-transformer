@@ -23,10 +23,16 @@ docker compose up             # 開発サーバ(http://localhost:5173)
 docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 ```
 
-## 1. GitHub Pages(プレビュー公開)
+## 1. GitHub Pages(廃止済み)
 
-1. リポジトリの Settings → Pages → Build and deployment → Source を **GitHub Actions** にする
-2. main に push すると `.github/workflows/deploy.yml` が動き、`https://shin4488.github.io/learning-transformer/` に公開される
+独自ドメイン(learning-transformer.com)での公開に一本化したため、GitHub Pages は**無効化済み**(`https://shin4488.github.io/learning-transformer/` は 404)。
+
+- デプロイ用ワークフロー `.github/workflows/deploy.yml` は**ファイルとしては残っているが、GitHub 側の設定で実行を無効化してある**(`gh workflow disable deploy.yml` を実行済み。ファイルは未変更)
+- リポジトリの Actions タブでは「This workflow was manually disabled」と表示される
+- 再度 GitHub Pages で公開したい場合:
+  1. `gh workflow enable deploy.yml`(または Actions タブのボタン)でワークフローを再有効化
+  2. Settings → Pages → Source を **GitHub Actions** にする
+  3. main に push すると再公開される
 
 ## 2. 独自ドメイン + Cloudflare Pages(本公開)
 
