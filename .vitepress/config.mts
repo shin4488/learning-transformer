@@ -13,9 +13,8 @@ const SITE_URL = 'https://learning-transformer.com'
 // AdSense アカウント開設後にここへ設定すると、全ページに広告・審査用のタグが入る。
 const ADSENSE_CLIENT = ''
 
-// Google Analytics(GA4)の測定ID(例: 'G-XXXXXXXXXX')。
-// GA4 プロパティ作成後にここへ設定すると、全ページに計測タグが入る。
-const GA_ID = ''
+// Google Analytics(GA4)の測定ID
+const GA_ID = 'G-9VXNS22KZ1'
 
 // GitHub Pages(プロジェクトサイト)では DOCS_BASE=/learning-transformer/ を、
 // 独自ドメイン・Cloudflare Pages ではベースパスなし(既定)を使う。

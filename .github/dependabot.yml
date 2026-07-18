@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # GitHub Actions のバージョン更新(ハッシュ固定でも新バージョンのPRが届く)
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  # npm 依存(VitePress等)の更新。通知が多くなりすぎないよう月1回・まとめてPR
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
