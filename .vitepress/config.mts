@@ -126,6 +126,9 @@ export default withMermaid(defineConfig({
     'README.md': 'index.md',
   },
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: `${base}favicon.png` }],
+    ['link', { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }],
     ['meta', { name: 'theme-color', content: '#f0b429' }],
     ...(GA_ID
       ? ([
