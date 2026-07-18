@@ -1,6 +1,7 @@
 import { defineConfig, type HeadConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import mathjax3 from 'markdown-it-mathjax3'
+import type { LanguageRegistration } from 'shiki'
 
 const SITE_TITLE = 'ゼロから理解するTransformer'
 const SITE_DESCRIPTION =
@@ -75,6 +76,14 @@ function githubMathToStandard() {
       return out === code ? null : out
     },
   }
+}
+
+// ハイライトなしの言語 'math' の定義(```math ブロック用。中身は空のTextMate文法)
+const mathLanguage: LanguageRegistration = {
+  name: 'math',
+  scopeName: 'source.math',
+  patterns: [],
+  repository: { $self: {}, $base: {} },
 }
 
 // MathJax が出力するタグを Vue コンポーネントと誤認しないための登録(VitePress 公式ドキュメントの設定)
@@ -205,9 +214,7 @@ export default withMermaid(defineConfig({
     // ```math ブロックはビルド時に $$ に変換されるが、検索インデックス作成時は
     // 変換前のソースが読まれるため、言語 'math' をハイライトなしの言語として
     // 登録して「The language 'math' is not loaded」警告を抑止する
-    languages: [
-      { name: 'math', scopeName: 'source.math', patterns: [], repository: {} } as any,
-    ],
+    languages: [mathLanguage],
     config: (md) => {
       md.use(mathjax3)
     },
