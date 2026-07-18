@@ -34,7 +34,19 @@ npm run build    # 本番ビルド(.vitepress/dist に出力)
 
 GitHub Pages 側を止めたい場合は Settings → Pages で無効化する(併存していても害はない)。
 
-## 3. Google AdSense
+## 3. Google Analytics(GA4)
+
+1. [Google Analytics](https://analytics.google.com/) でアカウントとプロパティを作成(プラットフォーム: ウェブ、サイトURLを入力)
+2. 発行された **測定ID(G-XXXXXXXXXX)** を `.vitepress/config.mts` の `GA_ID` に設定して push
+3. サイトを開き、GA のリアルタイムレポートに自分のアクセスが出れば設定完了
+
+## 4. Google Search Console(SEO)
+
+1. [Search Console](https://search.google.com/search-console) でプロパティを追加(独自ドメインなら「ドメイン」、GitHub Pages のうちは「URLプレフィックス」で登録)
+2. 所有権確認は、GA4 設定済みなら「Google Analytics」経由で自動確認できる
+3. 「サイトマップ」に `sitemap.xml` を送信する(例: `https://shin4488.github.io/learning-transformer/sitemap.xml`)
+
+## 5. Google AdSense
 
 1. サイトを独自ドメインで公開し、ある程度アクセスできる状態にする
 2. [AdSense](https://adsense.google.com/) でアカウントを開設し、サイト(独自ドメイン)を追加して審査を申請
