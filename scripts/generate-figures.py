@@ -252,6 +252,31 @@ def ch06_king_queen():
     save(fig, 'ch06-king-queen.png')
 
 
+# ---- 第15章 15.5.2 RoPE: 回しても「間の角度」は変わらない -----------------
+def ch15_rope_clock():
+    import math
+    from matplotlib.patches import Arc
+    fig, axes = plt.subplots(1, 2, figsize=(8.8, 4.6))
+    cases = [
+        ('ペア1: 位置1と位置3(10°と30°に回転)', 10, 30),
+        ('ペア2: 位置5と位置7(50°と70°に回転)', 50, 70),
+    ]
+    for ax, (title, qdeg, kdeg) in zip(axes, cases):
+        ax.add_patch(plt.Circle((0, 0), 1.0, fill=False, color=GRAY, ls='--', lw=1))
+        for deg, label, color, off in [(qdeg, f'q({qdeg}°)', BLUE, (8, -12)),
+                                       (kdeg, f'k({kdeg}°)', ORANGE, (6, 6))]:
+            x, y = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+            arrow(ax, (0, 0), (x, y), color)
+            ax.annotate(label, (x, y), textcoords='offset points', xytext=off, fontsize=11, color=color)
+        ax.add_patch(Arc((0, 0), 1.1, 1.1, angle=0, theta1=qdeg, theta2=kdeg, color=GREEN, lw=2.5))
+        ax.annotate('なす角 = 20°', (0, -0.35), fontsize=12, color=GREEN, ha='center')
+        ax.set_xlim(-1.35, 1.6); ax.set_ylim(-1.25, 1.4)
+        ax.set_aspect('equal')
+        ax.axis('off')
+        ax.set_title(title, fontsize=11)
+    save(fig, 'ch15-rope-clock.png')
+
+
 if __name__ == '__main__':
     ch02_dot_product_patterns()
     ch02_word_vectors()
@@ -263,3 +288,4 @@ if __name__ == '__main__':
     ch04_overfitting()
     ch06_embedding_space()
     ch06_king_queen()
+    ch15_rope_clock()
