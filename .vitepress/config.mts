@@ -202,6 +202,12 @@ export default withMermaid(defineConfig({
     },
   },
   markdown: {
+    // ```math ブロックはビルド時に $$ に変換されるが、検索インデックス作成時は
+    // 変換前のソースが読まれるため、言語 'math' をハイライトなしの言語として
+    // 登録して「The language 'math' is not loaded」警告を抑止する
+    languages: [
+      { name: 'math', scopeName: 'source.math', patterns: [], repository: {} } as any,
+    ],
     config: (md) => {
       md.use(mathjax3)
     },
