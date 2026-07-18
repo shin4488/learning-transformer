@@ -189,9 +189,6 @@ export default withMermaid(defineConfig({
       { text: 'サイト情報', items: [{ text: 'プライバシーポリシー', link: '/privacy-policy' }] },
     ],
     outline: { level: [2, 3], label: 'このページの目次' },
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/shin4488/learning-transformer' },
-    ],
     docFooter: { prev: '前の章', next: '次の章' },
     darkModeSwitchLabel: 'テーマ',
     sidebarMenuLabel: '目次',
