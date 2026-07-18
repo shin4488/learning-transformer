@@ -6,8 +6,8 @@ const SITE_TITLE = 'ゼロから理解するTransformer'
 const SITE_DESCRIPTION =
   '予備知識なしで読める、ChatGPTなどのLLMの中核技術Transformerの解説書。数学の準備からAttention、RLHF、効率化技術まで。'
 
-// 公開URL(末尾スラッシュなし)。独自ドメイン移行時はここを書き換える。
-const SITE_URL = 'https://shin4488.github.io/learning-transformer'
+// 公開URL(末尾スラッシュなし)
+const SITE_URL = 'https://learning-transformer.com'
 
 // Google AdSense のクライアントID(例: 'ca-pub-1234567890123456')。
 // AdSense アカウント開設後にここへ設定すると、全ページに広告・審査用のタグが入る。
