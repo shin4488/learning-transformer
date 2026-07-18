@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shin4488.github.io/learning-transformer/sitemap.xml

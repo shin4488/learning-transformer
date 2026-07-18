@@ -1,14 +1,65 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig, type HeadConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import mathjax3 from 'markdown-it-mathjax3'
 
+const SITE_TITLE = 'ゼロから理解するTransformer'
+const SITE_DESCRIPTION =
+  '予備知識なしで読める、ChatGPTなどのLLMの中核技術Transformerの解説書。数学の準備からAttention、RLHF、効率化技術まで。'
+
+// 公開URL(末尾スラッシュなし)。独自ドメイン移行時はここを書き換える。
+const SITE_URL = 'https://shin4488.github.io/learning-transformer'
+
 // Google AdSense のクライアントID(例: 'ca-pub-1234567890123456')。
-// AdSense アカウント開設後にここへ設定すると、全ページに自動広告のタグが入る。
+// AdSense アカウント開設後にここへ設定すると、全ページに広告・審査用のタグが入る。
 const ADSENSE_CLIENT = ''
+
+// Google Analytics(GA4)の測定ID(例: 'G-XXXXXXXXXX')。
+// GA4 プロパティ作成後にここへ設定すると、全ページに計測タグが入る。
+const GA_ID = ''
 
 // GitHub Pages(プロジェクトサイト)では DOCS_BASE=/learning-transformer/ を、
 // 独自ドメイン・Cloudflare Pages ではベースパスなし(既定)を使う。
 const base = process.env.DOCS_BASE || '/'
+
+// 各ページの meta description(検索結果・SNSカードに表示される要約)
+const pageDescriptions: Record<string, string> = {
+  'index.md': SITE_DESCRIPTION,
+  'README.md': SITE_DESCRIPTION,
+  '01-functions-and-symbols.md':
+    '関数・指数・対数・Σ記法など、Transformer理解に必要な数学記号の読み方を、文系高校数学レベルから丁寧に解説します。',
+  '02-vectors-and-matrices.md':
+    'ベクトルと行列をゼロから解説。Attentionを理解する鍵になる「内積 = 類似度」という考え方を、手計算と図で身につけます。',
+  '03-derivatives-gradients-probability.md':
+    '微分・勾配・連鎖律・確率分布を直感的に解説。機械学習の「学習」を支える数学をここで準備します。',
+  '04-machine-learning-basics.md':
+    '損失関数と勾配降下法を実際に手計算しながら、「データから学ぶ」機械学習の仕組みを一次関数の例で理解します。',
+  '05-neural-networks.md':
+    '人工ニューロン・活性化関数・softmax・交差エントロピー・逆伝播まで、ニューラルネットワークの仕組みをゼロから解説します。',
+  '06-words-to-numbers.md':
+    'トークン化(BPE)と埋め込みベクトルの仕組みを解説。言葉をニューラルネットワークが扱える「数の並び」に変える方法が分かります。',
+  '07-before-transformer.md':
+    '言語モデルとは何か。n-gram・RNN・LSTM・seq2seqの発展と限界をたどり、Attentionが生まれるまでの流れを解説します。',
+  '08-attention.md':
+    'Transformerの中核であるAttentionを完全解説。Q/K/V・スケーリング・Multi-Head・因果マスクまで、すべて手計算で追えます。',
+  '09-transformer-architecture.md':
+    '位置エンコーディング・残差接続・LayerNorm・FFN。部品を組み上げて、Transformer全体のアーキテクチャを理解します。',
+  '10-training.md':
+    '自己教師あり学習と次単語予測。Transformerが大量のテキストからどのように言葉を学ぶのか、訓練の仕組みを解説します。',
+  '11-bert-gpt-t5.md':
+    'BERT・GPT・T5という3つの系譜の違いと使い分け、そして現代のLLMがデコーダのみ構成になった理由を解説します。',
+  '12-from-llm-to-chat-ai.md':
+    '事前学習済みLLMが対話AIになるまで。指示チューニング(SFT)とRLHF(人間のフィードバックによる強化学習)の仕組みを解説します。',
+  '13-scaling-laws.md':
+    'スケーリング則とChinchilla、創発的能力。「AIはなぜ急に賢くなったのか」を、規模と性能の法則から読み解きます。',
+  '14-text-generation.md':
+    '温度・top-k・top-pなどのサンプリング手法と自己回帰生成ループ。LLMが1トークンずつ文章を作る仕組みを解説します。',
+  '15-efficiency.md':
+    'KVキャッシュ・FlashAttention・量子化・LoRA・MoEなど、巨大なLLMを実用的な速度とコストで動かす効率化技術を解説します。',
+  '16-conclusion-and-next-steps.md':
+    '全16章の総まとめ。1枚で振り返るTransformer、よくある質問、用語集、この先の学習ロードマップを収録しています。',
+  'privacy-policy.md':
+    '当サイトのプライバシーポリシーと免責事項。広告配信・アクセス解析における Cookie の取り扱いについて説明します。',
+}
 
 // GitHub 固有の数式記法を、VitePress(markdown-it-mathjax3)が読める形に直す。
 // 章の md ファイル自体は GitHub でもそのまま読めるよう変更しない。
@@ -66,26 +117,54 @@ const chapters = {
 
 export default withMermaid(defineConfig({
   lang: 'ja-JP',
-  title: 'ゼロから理解するTransformer',
-  description: '予備知識なしで読める、ChatGPTなどのLLMの中核技術Transformerの解説書。数学の準備からAttention、RLHF、効率化技術まで。',
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   base,
+  cleanUrls: true,
+  sitemap: { hostname: `${SITE_URL}/` },
   srcExclude: ['DEPLOY.md'],
   rewrites: {
     'README.md': 'index.md',
   },
   head: [
     ['meta', { name: 'theme-color', content: '#f0b429' }],
+    ...(GA_ID
+      ? ([
+          ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${GA_ID}` }],
+          ['script', {}, `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`],
+        ] as HeadConfig[])
+      : []),
     ...(ADSENSE_CLIENT
-      ? [[
-          'script',
-          {
+      ? ([
+          ['script', {
             async: '',
             src: `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`,
             crossorigin: 'anonymous',
-          },
-        ] as ['script', Record<string, string>]]
+          }],
+        ] as HeadConfig[])
       : []),
   ],
+  transformPageData(pageData) {
+    const rel = pageData.relativePath
+    const description = pageDescriptions[rel] ?? SITE_DESCRIPTION
+    pageData.description = description
+
+    const cleanPath = rel.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')
+    const url = cleanPath ? `${SITE_URL}/${cleanPath}` : `${SITE_URL}/`
+    const title = pageData.title ? `${pageData.title} | ${SITE_TITLE}` : SITE_TITLE
+
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push(
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:site_name', content: SITE_TITLE }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:type', content: cleanPath ? 'article' : 'website' }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:locale', content: 'ja_JP' }],
+      ['meta', { name: 'twitter:card', content: 'summary' }],
+    )
+  },
   themeConfig: {
     nav: [
       { text: 'ホーム', link: '/' },
