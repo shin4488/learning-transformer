@@ -9,9 +9,8 @@ const SITE_DESCRIPTION =
 // 公開URL(末尾スラッシュなし)
 const SITE_URL = 'https://learning-transformer.com'
 
-// Google AdSense のクライアントID(例: 'ca-pub-1234567890123456')。
-// AdSense アカウント開設後にここへ設定すると、全ページに広告・審査用のタグが入る。
-const ADSENSE_CLIENT = ''
+// Google AdSense のクライアントID
+const ADSENSE_CLIENT = 'ca-pub-4736370148395141'
 
 // Google Analytics(GA4)の測定ID
 const GA_ID = 'G-9VXNS22KZ1'
