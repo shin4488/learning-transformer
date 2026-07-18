@@ -16,6 +16,13 @@ npm run dev      # http://localhost:5173 でプレビュー
 npm run build    # 本番ビルド(.vitepress/dist に出力)
 ```
 
+Node をローカルに入れたくない場合は Docker でも動かせる(Node のバージョン差異にも影響されない):
+
+```sh
+docker compose up             # 開発サーバ(http://localhost:5173)
+docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
+```
+
 ## 1. GitHub Pages(プレビュー公開)
 
 1. リポジトリの Settings → Pages → Build and deployment → Source を **GitHub Actions** にする
