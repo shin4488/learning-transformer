@@ -31,11 +31,14 @@ docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 ## 2. 独自ドメイン + Cloudflare Pages(本公開)
 
 1. [Cloudflare](https://dash.cloudflare.com/) にアカウント作成 → 「ドメイン登録」からドメインを取得(原価販売。.com で年約$11)
-2. Cloudflare ダッシュボード → Workers & Pages → Create → Pages → **Connect to Git** で `shin4488/learning-transformer` を接続
-3. ビルド設定:
-   - Build command: `npm run build`
-   - Build output directory: `.vitepress/dist`
-   - 環境変数: 不要(独自ドメイン直下で公開するため `DOCS_BASE` は設定しない)
+2. Cloudflare ダッシュボード → Workers & Pages → 作成 → Git に接続 で `shin4488/learning-transformer` を接続
+3. ビルド設定(新UI・デプロイコマンド欄がある場合):
+   - ビルドコマンド: `npm run build`
+   - デプロイコマンド: `npx wrangler deploy`(リポジトリの `wrangler.jsonc` が配信対象 `.vitepress/dist` を指定している)
+   - 環境変数: `NODE_VERSION` = `22`(wrangler が Node 22 以上を要求するため)。`DOCS_BASE` は設定しない(独自ドメイン直下で公開するため)
+
+   旧UI(Pages タブでデプロイコマンド欄がない場合):
+   - Build command: `npm run build` / Build output directory: `.vitepress/dist` / 環境変数不要
 4. Custom domains で取得したドメインを割り当てる(同じ Cloudflare アカウント内なので DNS は自動設定)
 5. 以後、main へ push するたびに自動デプロイされる
 
