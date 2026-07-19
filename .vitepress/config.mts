@@ -138,6 +138,11 @@ export default withMermaid(defineConfig({
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: `${base}favicon.png` }],
     ['link', { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }],
     ['meta', { name: 'theme-color', content: '#f0b429' }],
+    // Mermaid はノード内ラベルの寸法を body 直下(line-height: 24px)で計測してから
+    // SVG を記事内に挿入するが、記事内では .vp-doc p { line-height: 28px } が適用されて
+    // ラベルが計測時より縦に伸び、ノードの枠からはみ出して文字が切れる。
+    // 計測時と同じ値(body から継承した 24px)に揃えて、ずれをなくす。
+    ['style', {}, '.vp-doc .mermaid p { line-height: inherit; }'],
     ...(GA_ID
       ? ([
           ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${GA_ID}` }],
