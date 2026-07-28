@@ -56,6 +56,10 @@ const pageDescriptions: Record<string, string> = {
     'KVキャッシュ・FlashAttention・量子化・LoRA・MoEなど、巨大なLLMを実用的な速度とコストで動かす効率化技術を解説します。',
   '16-conclusion-and-next-steps.md':
     '全16章の総まとめ。1枚で振り返るTransformer、よくある質問、用語集、この先の学習ロードマップを収録しています。',
+  'about.md':
+    '「ゼロから理解するTransformer」の目的・対象読者・運営者について。予備知識なしでLLMの仕組みを学べる無料のオンライン教材です。',
+  'contact.md':
+    '当サイトへのご意見・ご質問・誤りの指摘の窓口です。',
   'privacy-policy.md':
     '当サイトのプライバシーポリシーと免責事項。広告配信・アクセス解析における Cookie の取り扱いについて説明します。',
 }
@@ -184,14 +188,28 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'ホーム', link: '/' },
       { text: '第1章から読む', link: '/01-functions-and-symbols' },
-      { text: 'プライバシーポリシー', link: '/privacy-policy' },
+      {
+        text: 'サイト情報',
+        items: [
+          { text: 'このサイトについて', link: '/about' },
+          { text: 'お問い合わせ', link: '/contact' },
+          { text: 'プライバシーポリシー', link: '/privacy-policy' },
+        ],
+      },
     ],
     sidebar: [
       { text: 'はじめに', items: [{ text: '本書について', link: '/' }] },
       { text: '第I部 基礎編', items: chapters.basics },
       { text: '第II部 入門編', items: chapters.intro },
       { text: '第III部 応用編', items: chapters.advanced },
-      { text: 'サイト情報', items: [{ text: 'プライバシーポリシー', link: '/privacy-policy' }] },
+      {
+        text: 'サイト情報',
+        items: [
+          { text: 'このサイトについて', link: '/about' },
+          { text: 'お問い合わせ', link: '/contact' },
+          { text: 'プライバシーポリシー', link: '/privacy-policy' },
+        ],
+      },
     ],
     outline: { level: [2, 3], label: 'このページの目次' },
     docFooter: { prev: '前の章', next: '次の章' },
