@@ -1,16 +1,14 @@
 # お問い合わせ
 
-当サイトへのご意見・ご質問・誤りの指摘は、以下の窓口で受け付けています。
+当サイトへのご意見・ご質問・誤りの指摘は、以下のフォームからお寄せください。
 
-## GitHub Issue(誤りの指摘・技術的な質問向け)
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeOXAGjp-WgeOUnnkA2QHfx2-tR2Fb3dSct-cIYKbIGYzCkcg/viewform?embedded=true" width="100%" height="960" frameborder="0" marginheight="0" marginwidth="0" title="お問い合わせフォーム">読み込んでいます…</iframe>
 
-本サイトの原稿は GitHub で公開しています。内容の誤りの指摘や技術的な質問は、[GitHub リポジトリの Issue](https://github.com/shin4488/learning-transformer/issues) からお寄せください。
+フォームが表示されない場合は、[こちらのリンク](https://forms.gle/C3YcY1Zs17BRMiyB8)から直接開いてください。
 
-<!-- TODO: Googleフォームが用意でき次第、ここに埋め込む
-## お問い合わせフォーム
+## GitHub Issue でも受け付けています
 
-<iframe src="GoogleフォームのURL" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
--->
+本サイトの原稿は GitHub で公開しています。内容の誤りの指摘や技術的な質問は、[GitHub リポジトリの Issue](https://github.com/shin4488/learning-transformer/issues) からも受け付けています。
 
 ## その他
 
