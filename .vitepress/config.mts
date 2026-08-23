@@ -60,6 +60,8 @@ const pageDescriptions: Record<string, string> = {
     '「ゼロから理解するTransformer」の目的・対象読者・運営者について。予備知識なしでLLMの仕組みを学べる無料のオンライン教材です。',
   'contact.md':
     '当サイトへのご意見・ご質問・誤りの指摘の窓口です。',
+  'changelog.md':
+    '本サイトの更新履歴です。公開後の改善・追加の記録を掲載しています。',
   'privacy-policy.md':
     '当サイトのプライバシーポリシーと免責事項。広告配信・アクセス解析における Cookie の取り扱いについて説明します。',
 }
@@ -132,6 +134,7 @@ export default withMermaid(defineConfig({
   description: SITE_DESCRIPTION,
   base,
   cleanUrls: true,
+  lastUpdated: true,
   sitemap: { hostname: `${SITE_URL}/` },
   srcExclude: ['DEPLOY.md', 'CLAUDE.md'],
   rewrites: {
@@ -182,6 +185,17 @@ export default withMermaid(defineConfig({
       ['meta', { property: 'og:url', content: url }],
       ['meta', { property: 'og:locale', content: 'ja_JP' }],
       ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['script', { type: 'application/ld+json' }, JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': cleanPath ? 'TechArticle' : 'WebSite',
+        headline: pageData.title || SITE_TITLE,
+        description,
+        url,
+        inLanguage: 'ja',
+        author: { '@type': 'Person', name: 'shin4488', url: 'https://github.com/shin4488' },
+        publisher: { '@type': 'Person', name: 'shin4488' },
+        ...(pageData.lastUpdated ? { dateModified: new Date(pageData.lastUpdated).toISOString() } : {}),
+      })],
     )
   },
   themeConfig: {
@@ -206,6 +220,7 @@ export default withMermaid(defineConfig({
         text: 'サイト情報',
         items: [
           { text: 'このサイトについて', link: '/about' },
+          { text: '更新履歴', link: '/changelog' },
           { text: 'お問い合わせ', link: '/contact' },
           { text: 'プライバシーポリシー', link: '/privacy-policy' },
         ],
@@ -213,6 +228,7 @@ export default withMermaid(defineConfig({
     ],
     outline: { level: [2, 3], label: 'このページの目次' },
     docFooter: { prev: '前の章', next: '次の章' },
+    lastUpdated: { text: '最終更新' },
     darkModeSwitchLabel: 'テーマ',
     sidebarMenuLabel: '目次',
     returnToTopLabel: 'ページ上部へ',
