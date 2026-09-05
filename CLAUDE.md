@@ -64,4 +64,6 @@ docker compose run --rm build # Docker で本番ビルド
 
 ## Claude Code と Codex
 
-`AGENTS.md` はこのファイルへの相対シンボリックリンク。共通の指示は `CLAUDE.md` を編集する。両ファイルとも `.vitepress/config.mts` の `srcExclude` でサイト公開対象から除外する。
+- `AGENTS.md` はこのファイルへの相対シンボリックリンク。
+- 共通の指示は `CLAUDE.md` を編集する。
+- 両ファイルとも `.vitepress/config.mts` の `srcExclude` でサイト公開対象から除外する。
