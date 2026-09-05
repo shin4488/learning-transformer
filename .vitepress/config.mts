@@ -136,7 +136,7 @@ export default withMermaid(defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   sitemap: { hostname: `${SITE_URL}/` },
-  srcExclude: ['DEPLOY.md', 'CLAUDE.md'],
+  srcExclude: ['DEPLOY.md', 'CLAUDE.md', 'AGENTS.md'],
   rewrites: {
     'README.md': 'index.md',
   },

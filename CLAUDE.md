@@ -61,3 +61,7 @@ docker compose run --rm build # Docker で本番ビルド
 
 - 修正後は GitHub の Markdown API(`https://api.github.com/markdown`)にファイルを POST し、`math-renderer` 以外に生の `$` が残っていないかを確認すると、数式の描画崩れを機械的に検出できる
 - `npm run build` が通ること(リンク切れがあるとビルドが落ちる)
+
+## Claude Code と Codex
+
+`AGENTS.md` はこのファイルへの相対シンボリックリンク。共通の指示は `CLAUDE.md` を編集する。両ファイルとも `.vitepress/config.mts` の `srcExclude` でサイト公開対象から除外する。
