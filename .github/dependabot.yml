@@ -10,6 +10,14 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      # VitePress 1.x bundles markdown-it 14.1; plugin 1.x requires 14.2/15.
+      # Revisit this constraint when VitePress upgrades its bundled parser.
+      - dependency-name: "@mdit/plugin-mathjax"
+        versions: [">=1.0.0"]
+      # Match the supported Node.js major; review runtime upgrades together.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     groups:
       npm-dependencies:
         patterns:

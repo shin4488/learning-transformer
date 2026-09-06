@@ -10,6 +10,8 @@
 
 ## ローカルでの確認
 
+Node.jsは `.nvmrc` に指定したLTS版を使う。nvmを使う場合は、初回に `nvm install`、作業開始時に `nvm use` を実行する。対応外のNode.jsでは `.npmrc` の設定により依存インストールを停止する。
+
 ```sh
 npm ci
 npm test         # 数式描画・アクセシビリティ・XML注入の回帰テスト
@@ -17,7 +19,7 @@ npm run dev      # http://localhost:5173 でプレビュー
 npm run build    # 本番ビルド(.vitepress/dist に出力)
 ```
 
-PRのCIでも、Node 20(サブパス配信)とNode 22(ドメイン直下配信)でインストール・テスト・ビルドを確認する。CIはデプロイを行わない。
+PRのCIも `.nvmrc` を読み、サブパス配信とドメイン直下配信の両方でインストール・テスト・ビルドを確認する。CIはデプロイを行わない。Node.jsのメジャー版を変えるときは、`package.json` の対応範囲・型定義と `compose.yaml` のイメージもそろえる。
 
 Node をローカルに入れたくない場合は Docker でも動かせる(Node のバージョン差異にも影響されない):
 
@@ -30,7 +32,9 @@ docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 
 数式は `@mdit/plugin-mathjax` とMathJax 4でビルド時にSVGへ変換する。従来のTeXフォントと読み上げ用MathMLを維持し、ブラウザーでMathJaxやフォントCDNを読み込む必要はない。設定は `.vitepress/math.mjs` にある。
 
-プラグインは、VitePress 1.xのmarkdown-it 14とNode 20に対応する0.26.2を使用する。MathJax 4.1.3の公式依存が選ぶspeech-rule-engine 5.0.0-rc.4はxmldomを範囲指定しているため、修正版0.9.12を通常の依存解決で取り込める。`overrides` は不要。
+VitePress 1.xにはmarkdown-it 14.1が組み込まれているため、対応するプラグイン0.26系を使う。プラグイン1.0〜1.1系はmarkdown-it 14.2以上、1.2系は15系を要求するため、Node.jsだけを更新しても組み合わせの条件を満たせない。VitePress側が対応するまでは `.github/dependabot.yml` で1.x以降の更新を保留する。VitePress更新時には、この制限も見直す。
+
+MathJax 4の公式依存経路から、修正版のxmldomを取り込む。解決済みバージョンは `package-lock.json`、XML注入を防ぐ回帰テストは `tests/math.test.mjs` で確認する。`overrides` は不要。
 
 旧 `markdown-it-mathjax3` / `mathjax-full` は使用しない。旧経路のspeech-rule-engine 4.1.4は脆弱なxmldom 0.9.10を固定しているため、戻すと問題が再発する。数式プラグインを更新するときは `npm ci` と `npm test`、全ページのビルドを確認し、SVGの表示と読み上げ用MathMLも比較する。
 
@@ -38,7 +42,7 @@ docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 
 独自ドメイン(learning-transformer.com)での公開に一本化したため、GitHub Pages は**無効化済み**(`https://shin4488.github.io/learning-transformer/` は 404)。
 
-- デプロイ用ワークフロー `.github/workflows/deploy.yml` は**ファイルとしては残っているが、GitHub 側の設定で実行を無効化してある**(`gh workflow disable deploy.yml` を実行済み。ファイルは未変更)
+- デプロイ用ワークフロー `.github/workflows/deploy.yml` は**ファイルとしては残っているが、GitHub 側の設定で実行を無効化してある**(`gh workflow disable deploy.yml` を実行済み)。再開時も `.nvmrc` のNode.jsを使う。
 - リポジトリの Actions タブでは「This workflow was manually disabled」と表示される
 - 再度 GitHub Pages で公開したい場合:
   1. `gh workflow enable deploy.yml`(または Actions タブのボタン)でワークフローを再有効化
@@ -52,7 +56,7 @@ docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 3. ビルド設定(新UI・デプロイコマンド欄がある場合):
    - ビルドコマンド: `npm run build`
    - デプロイコマンド: `npx wrangler deploy`(リポジトリの `wrangler.jsonc` が配信対象 `.vitepress/dist` を指定している)
-   - 環境変数: `NODE_VERSION` = `22`(wrangler が Node 22 以上を要求するため)。`DOCS_BASE` は設定しない(独自ドメイン直下で公開するため)
+   - Node.js: リポジトリの `.nvmrc` を使う。既存のビルド環境変数 `NODE_VERSION` がある場合は削除し、ファイルの指定にそろえる。`DOCS_BASE` は設定しない(独自ドメイン直下で公開するため)
 
    旧UI(Pages タブでデプロイコマンド欄がない場合):
    - Build command: `npm run build` / Build output directory: `.vitepress/dist` / 環境変数不要
