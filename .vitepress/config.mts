@@ -1,6 +1,6 @@
 import { defineConfig, type HeadConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
-import mathjax3 from 'markdown-it-mathjax3'
+import { mathjax, mathjaxInstance, mathjaxStyle, normalizeGithubMath } from './math.mjs'
 import type { LanguageRegistration } from 'shiki'
 
 const SITE_TITLE = 'ゼロから理解するTransformer'
@@ -66,7 +66,7 @@ const pageDescriptions: Record<string, string> = {
     '当サイトのプライバシーポリシーと免責事項。広告配信・アクセス解析における Cookie の取り扱いについて説明します。',
 }
 
-// GitHub 固有の数式記法を、VitePress(markdown-it-mathjax3)が読める形に直す。
+// GitHub 固有の数式記法を、VitePress(MathJax)が読める形に直す。
 // 章の md ファイル自体は GitHub でもそのまま読めるよう変更しない。
 //   - インライン数式  $`...`$  →  $...$
 //   - ブロック数式    ```math ... ```  →  $$ ... $$
@@ -76,9 +76,7 @@ function githubMathToStandard() {
     enforce: 'pre' as const,
     transform(code: string, id: string) {
       if (!id.endsWith('.md')) return null
-      let out = code.replace(/\$`([^`\n]+?)`\$/g, (_, expr) => `$${expr}$`)
-      out = out.replace(/^([ \t]*)```math\s*\n([\s\S]*?)^[ \t]*```[ \t]*$/gm,
-        (_, indent, body) => `${indent}$$\n${body}${indent}$$`)
+      const out = normalizeGithubMath(code)
       return out === code ? null : out
     },
   }
@@ -150,6 +148,7 @@ export default withMermaid(defineConfig({
     // ラベルが計測時より縦に伸び、ノードの枠からはみ出して文字が切れる。
     // 計測時と同じ値(body から継承した 24px)に揃えて、ずれをなくす。
     ['style', {}, '.vp-doc .mermaid p { line-height: inherit; }'],
+    ['style', {}, mathjaxStyle],
     ...(GA_ID
       ? ([
           ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${GA_ID}` }],
@@ -252,7 +251,7 @@ export default withMermaid(defineConfig({
     // 登録して「The language 'math' is not loaded」警告を抑止する
     languages: [mathLanguage],
     config: (md) => {
-      md.use(mathjax3)
+      md.use(mathjax, mathjaxInstance)
     },
   },
   vite: {

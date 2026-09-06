@@ -11,10 +11,13 @@
 ## ローカルでの確認
 
 ```sh
-npm install
+npm ci
+npm test         # 数式描画・アクセシビリティ・XML注入の回帰テスト
 npm run dev      # http://localhost:5173 でプレビュー
 npm run build    # 本番ビルド(.vitepress/dist に出力)
 ```
+
+PRのCIでも、Node 20(サブパス配信)とNode 22(ドメイン直下配信)でインストール・テスト・ビルドを確認する。CIはデプロイを行わない。
 
 Node をローカルに入れたくない場合は Docker でも動かせる(Node のバージョン差異にも影響されない):
 
@@ -22,6 +25,14 @@ Node をローカルに入れたくない場合は Docker でも動かせる(Nod
 docker compose up             # 開発サーバ(http://localhost:5173)
 docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 ```
+
+### 数式描画の依存関係
+
+数式は `@mdit/plugin-mathjax` とMathJax 4でビルド時にSVGへ変換する。従来のTeXフォントと読み上げ用MathMLを維持し、ブラウザーでMathJaxやフォントCDNを読み込む必要はない。設定は `.vitepress/math.mjs` にある。
+
+プラグインは、VitePress 1.xのmarkdown-it 14とNode 20に対応する0.26.2を使用する。MathJax 4.1.3の公式依存が選ぶspeech-rule-engine 5.0.0-rc.4はxmldomを範囲指定しているため、修正版0.9.12を通常の依存解決で取り込める。`overrides` は不要。
+
+旧 `markdown-it-mathjax3` / `mathjax-full` は使用しない。旧経路のspeech-rule-engine 4.1.4は脆弱なxmldom 0.9.10を固定しているため、戻すと問題が再発する。数式プラグインを更新するときは `npm ci` と `npm test`、全ページのビルドを確認し、SVGの表示と読み上げ用MathMLも比較する。
 
 ## 1. GitHub Pages(廃止済み)
 
