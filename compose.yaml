@@ -2,7 +2,7 @@ services:
   # 開発サーバ: docker compose up
   # http://localhost:5173 でプレビュー(md を編集すると即時反映)
   docs:
-    image: node:20-slim
+    image: node:24-slim
     working_dir: /app
     volumes:
       - .:/app
@@ -15,7 +15,7 @@ services:
   # 本番ビルド: docker compose run --rm build
   # 出力は .vitepress/dist に生成される
   build:
-    image: node:20-slim
+    image: node:24-slim
     working_dir: /app
     volumes:
       - .:/app

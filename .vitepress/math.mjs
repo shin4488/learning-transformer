@@ -10,8 +10,9 @@ export function normalizeGithubMath(code) {
   return out
 }
 
-// The plugin's 0.26 line supports the Node 20 / markdown-it 14 used by
-// VitePress 1.x. MathJax 4 resolves patched xmldom through its own dependencies.
+// VitePress 1.x bundles markdown-it 14.1; the plugin's 0.26 line supports it.
+// Revisit the Dependabot constraint when the bundled parser changes.
+// MathJax 4 resolves patched xmldom through its own dependencies.
 export const mathjaxInstance = await createMathjaxInstance({
   output: 'svg',
   a11y: true,
