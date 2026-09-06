@@ -1,19 +1,19 @@
 # CLAUDE.md
 
-Transformer解説書『ゼロから理解するTransformer』のリポジトリ。初心者向けの日本語技術書(全16章 + README)を Markdown で管理し、VitePress で静的サイトとして公開している。
+Transformer解説書『ゼロから理解するTransformer』のリポジトリ。初心者向けの日本語技術書を Markdown で管理し、VitePress で静的サイトとして公開している。
 
 ## 構成
 
-- `README.md`, `01-*.md` 〜 `16-*.md`: 書籍本体。**GitHub 上でもそのまま読める記法を維持する**(下記の記法規約を参照)
+- `README.md`, `[0-9][0-9]-*.md`: 書籍本体。**GitHub 上でもそのまま読める記法を維持する**(下記の記法規約を参照)
 - `privacy-policy.md`: AdSense 用のプライバシーポリシー(サイトにのみ意味を持つページ)
-- `.vitepress/config.mts`: サイト設定。サイドバー・SEO(ページ別 description)・数式記法のビルド時変換・AdSense/GA の ID 設定口(`ADSENSE_CLIENT` / `GA_ID` / `SITE_URL`)がここにある
+- `.vitepress/config.mts`: サイト設定。サイドバー・SEO・数式変換・AdSense/GAの設定入口。対象章や変更する設定だけを確認する
 - `DEPLOY.md`: 運用手順(ホスティング・ドメイン・AdSense/GA)。サイトには公開されない(srcExclude)
 - `.github/workflows/deploy.yml`: GitHub Pages への自動デプロイ(`DOCS_BASE=/learning-transformer/` を設定してビルド)。Cloudflare Pages では環境変数なしでビルドする(両対応)
 
 ## コマンド
 
 ```sh
-npm run dev      # 開発サーバ(要 Node 20)
+npm run dev      # 開発サーバ（環境はpackage・Docker定義を確認）
 npm run build    # 本番ビルド → .vitepress/dist
 npm test         # 数式描画・アクセシビリティ・XML注入の回帰テスト
 docker compose up             # Docker で開発サーバ(http://localhost:5173)
@@ -62,10 +62,20 @@ docker compose run --rm build # Docker で本番ビルド
 
 - 修正後は GitHub の Markdown API(`https://api.github.com/markdown`)にファイルを POST し、`math-renderer` 以外に生の `$` が残っていないかを確認すると、数式の描画崩れを機械的に検出できる
 - `npm run build` が通ること(リンク切れがあるとビルドが落ちる)
-- 数式描画は `.vitepress/math.mjs` のMathJax 4構成を使う。依存や設定の変更時は `npm test` も実行する。PRのCIはNode 20/22でテストとビルドを行う。
+- 数式描画は `.vitepress/math.mjs` の構成を使う。依存や設定の変更時は `npm test` も実行する。PRのCIが使う実行環境・検証内容は `.github/workflows/` を正とする。
 
 ## Claude Code と Codex
 
 - `AGENTS.md` はこのファイルへの相対シンボリックリンク。
 - 共通の指示は `CLAUDE.md` を編集する。
 - 両ファイルとも `.vitepress/config.mts` の `srcExclude` でサイト公開対象から除外する。
+
+## 調査と指示の保守
+
+- `AGENTS.md` は `CLAUDE.md` への相対リンク。本文は一度読み、実体を編集する。
+- `rg` は対象ディレクトリから名前・見出し・シンボルを探す。通常は `-g` で依存・成果物・ログ・ロックファイル・生成コードを除外し、依存・生成・型・障害の調査では直接読む。見つからなければ範囲・除外を見直す。
+- 必須検証を行い、要点・失敗箇所を報告する。同じ差分・依存・設定・実行条件の結果は再利用する。
+- ここは恒久規約・必須条件・主要コマンド・参照先に限る。進捗はチャット・既存Issue/PR、機能・構成・依存・設定等の現在値は元の定義へ。規約・条件・参照先の変更や継続して必要な判断基準の追加時に更新する。
+- スキルは説明から選び、該当 `SKILL.md` に従う。一覧・手順は転記せず、このガイドの必須適用条件は守る。
+
+書籍の調査は対象章から始め、前提やリンクの確認が必要なときに関連章へ広げる。
