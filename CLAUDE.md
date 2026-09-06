@@ -15,6 +15,7 @@ Transformer解説書『ゼロから理解するTransformer』のリポジトリ�
 ```sh
 npm run dev      # 開発サーバ(要 Node 20)
 npm run build    # 本番ビルド → .vitepress/dist
+npm test         # 数式描画・アクセシビリティ・XML注入の回帰テスト
 docker compose up             # Docker で開発サーバ(http://localhost:5173)
 docker compose run --rm build # Docker で本番ビルド
 ```
@@ -61,6 +62,7 @@ docker compose run --rm build # Docker で本番ビルド
 
 - 修正後は GitHub の Markdown API(`https://api.github.com/markdown`)にファイルを POST し、`math-renderer` 以外に生の `$` が残っていないかを確認すると、数式の描画崩れを機械的に検出できる
 - `npm run build` が通ること(リンク切れがあるとビルドが落ちる)
+- 数式描画は `.vitepress/math.mjs` のMathJax 4構成を使う。依存や設定の変更時は `npm test` も実行する。PRのCIはNode 20/22でテストとビルドを行う。
 
 ## Claude Code と Codex
 
