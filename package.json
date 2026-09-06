@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@mathjax/mathjax-tex-font": "4.1.3",
-    "@mdit/plugin-mathjax": "0.26.2",
-    "@types/node": "^26.4.0",
+    "@mdit/plugin-mathjax": "1.2.0",
+    "@types/node": "^26.4.1",
     "mermaid": "^11.17.2",
     "vitepress": "^1.6.3",
     "vitepress-plugin-mermaid": "^2.0.17"
