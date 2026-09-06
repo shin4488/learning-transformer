@@ -38,9 +38,11 @@ docker compose run --rm build # Docker で本番ビルド
 ### 図
 
 - 構成図・フロー図: Mermaid `graph TD` / `flowchart TD`(向きは上から下に統一)。ノードラベルは `["..."]` とダブルクォートで囲む
+  - **例外**: 「入力 → 変換 → 出力」というデータの流れ自体が主題で、横に読み下す方が自然な少ノードの図は `graph LR` を維持してよい。例えば第1章の関数の直列つなぎ(1.9.1)、第3章の言語モデルの入出力(3.9.2)の2つ。TD への機械的な統一で書き換えないこと
 - 関数グラフ・棒グラフ: Mermaid `xychart-beta`(値は必ず正しく計算する。凡例が無いのでキャプションで系列を説明)
 - `quadrantChart` は GitHub でエラーになるため**使用禁止**
-- ベクトルの幾何・行列レイアウトなど Mermaid で表現できない図のみ ```` ```text ```` の ASCII 図。**描画部分は半角文字のみ、日本語ラベルは行末か独立行のみ**(全角文字が描画の途中にあると桁がずれる)
+- 散布図・ベクトルの矢印・等高線など Mermaid で表現できない図は、`scripts/generate-figures.py`(matplotlib)で `images/*.png` を生成して `![alt](images/xxx.png)` で埋め込む。数値は本文の手計算例と一致させ、色や矢印の意味はキャプションで説明する
+- 行列のレイアウト図など上記いずれにも向かない図のみ ```` ```text ```` の ASCII 図。**描画部分は半角文字のみ、日本語ラベルは行末か独立行のみ**(全角文字が描画の途中にあると桁がずれる)
 - スタイル指定には必ず `color:#24292f` など明示的な文字色を付ける(ダークモード対策)
 
 ### 引用・注記
@@ -59,3 +61,9 @@ docker compose run --rm build # Docker で本番ビルド
 
 - 修正後は GitHub の Markdown API(`https://api.github.com/markdown`)にファイルを POST し、`math-renderer` 以外に生の `$` が残っていないかを確認すると、数式の描画崩れを機械的に検出できる
 - `npm run build` が通ること(リンク切れがあるとビルドが落ちる)
+
+## Claude Code と Codex
+
+- `AGENTS.md` はこのファイルへの相対シンボリックリンク。
+- 共通の指示は `CLAUDE.md` を編集する。
+- 両ファイルとも `.vitepress/config.mts` の `srcExclude` でサイト公開対象から除外する。

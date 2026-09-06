@@ -1,6 +1,7 @@
 import { defineConfig, type HeadConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import mathjax3 from 'markdown-it-mathjax3'
+import type { LanguageRegistration } from 'shiki'
 
 const SITE_TITLE = 'ゼロから理解するTransformer'
 const SITE_DESCRIPTION =
@@ -9,9 +10,8 @@ const SITE_DESCRIPTION =
 // 公開URL(末尾スラッシュなし)
 const SITE_URL = 'https://learning-transformer.com'
 
-// Google AdSense のクライアントID(例: 'ca-pub-1234567890123456')。
-// AdSense アカウント開設後にここへ設定すると、全ページに広告・審査用のタグが入る。
-const ADSENSE_CLIENT = ''
+// Google AdSense のクライアントID
+const ADSENSE_CLIENT = 'ca-pub-4736370148395141'
 
 // Google Analytics(GA4)の測定ID
 const GA_ID = 'G-9VXNS22KZ1'
@@ -56,6 +56,12 @@ const pageDescriptions: Record<string, string> = {
     'KVキャッシュ・FlashAttention・量子化・LoRA・MoEなど、巨大なLLMを実用的な速度とコストで動かす効率化技術を解説します。',
   '16-conclusion-and-next-steps.md':
     '全16章の総まとめ。1枚で振り返るTransformer、よくある質問、用語集、この先の学習ロードマップを収録しています。',
+  'about.md':
+    '「ゼロから理解するTransformer」の目的・対象読者・運営者について。予備知識なしでLLMの仕組みを学べる無料のオンライン教材です。',
+  'contact.md':
+    '当サイトへのご意見・ご質問・誤りの指摘の窓口です。',
+  'changelog.md':
+    '本サイトの更新履歴です。公開後の改善・追加の記録を掲載しています。',
   'privacy-policy.md':
     '当サイトのプライバシーポリシーと免責事項。広告配信・アクセス解析における Cookie の取り扱いについて説明します。',
 }
@@ -76,6 +82,14 @@ function githubMathToStandard() {
       return out === code ? null : out
     },
   }
+}
+
+// ハイライトなしの言語 'math' の定義(```math ブロック用。中身は空のTextMate文法)
+const mathLanguage: LanguageRegistration = {
+  name: 'math',
+  scopeName: 'source.math',
+  patterns: [],
+  repository: { $self: {}, $base: {} },
 }
 
 // MathJax が出力するタグを Vue コンポーネントと誤認しないための登録(VitePress 公式ドキュメントの設定)
@@ -120,13 +134,22 @@ export default withMermaid(defineConfig({
   description: SITE_DESCRIPTION,
   base,
   cleanUrls: true,
+  lastUpdated: true,
   sitemap: { hostname: `${SITE_URL}/` },
-  srcExclude: ['DEPLOY.md', 'CLAUDE.md'],
+  srcExclude: ['DEPLOY.md', 'CLAUDE.md', 'AGENTS.md'],
   rewrites: {
     'README.md': 'index.md',
   },
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: `${base}favicon.png` }],
+    ['link', { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }],
     ['meta', { name: 'theme-color', content: '#f0b429' }],
+    // Mermaid はノード内ラベルの寸法を body 直下(line-height: 24px)で計測してから
+    // SVG を記事内に挿入するが、記事内では .vp-doc p { line-height: 28px } が適用されて
+    // ラベルが計測時より縦に伸び、ノードの枠からはみ出して文字が切れる。
+    // 計測時と同じ値(body から継承した 24px)に揃えて、ずれをなくす。
+    ['style', {}, '.vp-doc .mermaid p { line-height: inherit; }'],
     ...(GA_ID
       ? ([
           ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${GA_ID}` }],
@@ -162,26 +185,50 @@ export default withMermaid(defineConfig({
       ['meta', { property: 'og:url', content: url }],
       ['meta', { property: 'og:locale', content: 'ja_JP' }],
       ['meta', { name: 'twitter:card', content: 'summary' }],
+      ['script', { type: 'application/ld+json' }, JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': cleanPath ? 'TechArticle' : 'WebSite',
+        headline: pageData.title || SITE_TITLE,
+        description,
+        url,
+        inLanguage: 'ja',
+        author: { '@type': 'Person', name: 'shin4488', url: 'https://github.com/shin4488' },
+        publisher: { '@type': 'Person', name: 'shin4488' },
+        ...(pageData.lastUpdated ? { dateModified: new Date(pageData.lastUpdated).toISOString() } : {}),
+      })],
     )
   },
   themeConfig: {
     nav: [
       { text: 'ホーム', link: '/' },
       { text: '第1章から読む', link: '/01-functions-and-symbols' },
-      { text: 'プライバシーポリシー', link: '/privacy-policy' },
+      {
+        text: 'サイト情報',
+        items: [
+          { text: 'このサイトについて', link: '/about' },
+          { text: 'お問い合わせ', link: '/contact' },
+          { text: 'プライバシーポリシー', link: '/privacy-policy' },
+        ],
+      },
     ],
     sidebar: [
       { text: 'はじめに', items: [{ text: '本書について', link: '/' }] },
       { text: '第I部 基礎編', items: chapters.basics },
       { text: '第II部 入門編', items: chapters.intro },
       { text: '第III部 応用編', items: chapters.advanced },
-      { text: 'サイト情報', items: [{ text: 'プライバシーポリシー', link: '/privacy-policy' }] },
+      {
+        text: 'サイト情報',
+        items: [
+          { text: 'このサイトについて', link: '/about' },
+          { text: '更新履歴', link: '/changelog' },
+          { text: 'お問い合わせ', link: '/contact' },
+          { text: 'プライバシーポリシー', link: '/privacy-policy' },
+        ],
+      },
     ],
     outline: { level: [2, 3], label: 'このページの目次' },
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/shin4488/learning-transformer' },
-    ],
     docFooter: { prev: '前の章', next: '次の章' },
+    lastUpdated: { text: '最終更新' },
     darkModeSwitchLabel: 'テーマ',
     sidebarMenuLabel: '目次',
     returnToTopLabel: 'ページ上部へ',
@@ -200,6 +247,10 @@ export default withMermaid(defineConfig({
     },
   },
   markdown: {
+    // ```math ブロックはビルド時に $$ に変換されるが、検索インデックス作成時は
+    // 変換前のソースが読まれるため、言語 'math' をハイライトなしの言語として
+    // 登録して「The language 'math' is not loaded」警告を抑止する
+    languages: [mathLanguage],
     config: (md) => {
       md.use(mathjax3)
     },
