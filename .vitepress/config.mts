@@ -256,6 +256,10 @@ export default withMermaid(defineConfig({
   },
   vite: {
     plugins: [githubMathToStandard()],
+    // Mermaid の CommonJS 依存を開発時も ESM に変換する。
+    optimizeDeps: {
+      include: ['fastdom', 'fastdom/extensions/fastdom-promised.js'],
+    },
   },
   vue: {
     template: {
