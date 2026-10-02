@@ -1,5 +1,5 @@
 import { defineConfig, type HeadConfig } from 'vitepress'
-import { withMermaid } from 'vitepress-plugin-mermaid'
+import { mermaidMarkdown } from './mermaid.mjs'
 import { mathjax, mathjaxInstance, mathjaxStyle, normalizeGithubMath } from './math.mjs'
 import type { LanguageRegistration } from 'shiki'
 
@@ -126,7 +126,7 @@ const chapters = {
   ],
 }
 
-export default withMermaid(defineConfig({
+export default defineConfig({
   lang: 'ja-JP',
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
@@ -252,14 +252,11 @@ export default withMermaid(defineConfig({
     languages: [mathLanguage],
     config: (md) => {
       md.use(mathjax, mathjaxInstance)
+      md.use(mermaidMarkdown)
     },
   },
   vite: {
     plugins: [githubMathToStandard()],
-    // Mermaid の CommonJS 依存を開発時も ESM に変換する。
-    optimizeDeps: {
-      include: ['fastdom', 'fastdom/extensions/fastdom-promised.js'],
-    },
   },
   vue: {
     template: {
@@ -268,5 +265,4 @@ export default withMermaid(defineConfig({
       },
     },
   },
-  mermaid: {},
-}))
+})

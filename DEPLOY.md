@@ -14,7 +14,7 @@ Node.jsは `.nvmrc` に指定したLTS版を使う。nvmを使う場合は、初
 
 ```sh
 npm ci
-npm test         # 数式描画・アクセシビリティ・XML注入の回帰テスト
+npm test         # 数式・図の描画、アクセシビリティ、注入防止の回帰テスト
 npm run dev      # http://localhost:5173 でプレビュー
 npm run build    # 本番ビルド(.vitepress/dist に出力)
 ```
@@ -37,6 +37,12 @@ VitePress 1.xにはmarkdown-it 14.1が組み込まれているため、対応す
 MathJax 4の公式依存経路から、修正版のxmldomを取り込む。解決済みバージョンは `package-lock.json`、XML注入を防ぐ回帰テストは `tests/math.test.mjs` で確認する。`overrides` は不要。
 
 旧 `markdown-it-mathjax3` / `mathjax-full` は使用しない。旧経路のspeech-rule-engine 4.1.4は脆弱なxmldom 0.9.10を固定しているため、戻すと問題が再発する。数式プラグインを更新するときは `npm ci` と `npm test`、全ページのビルドを確認し、SVGの表示と読み上げ用MathMLも比較する。
+
+### Mermaidの描画
+
+Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue` から公式の `render` APIで描画する。古い `vitepress-plugin-mermaid` はMermaid 12と互換性がないため使用しない。本文のMermaidフェンスはGitHubで読める形を維持する。
+
+従来の配置・見た目を維持するため、Dagre配置とclassic表示を明示する。描画はブラウザーで行い、ダークモード変更時に再描画する。Mermaidの設定は描画ごとに直列に適用し、HTMLやリンクの安全性はstrict設定で保つ。依存更新時は `npm test` と両ベースパスでのビルドに加え、フロー図・xychartの表示、画面遷移、テーマ切り替えをブラウザーで確認する。
 
 ## 1. GitHub Pages(廃止済み)
 
