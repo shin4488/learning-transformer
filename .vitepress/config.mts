@@ -134,7 +134,7 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   sitemap: { hostname: `${SITE_URL}/` },
-  srcExclude: ['DEPLOY.md', 'CLAUDE.md', 'AGENTS.md'],
+  srcExclude: ['DEPLOY.md', 'AGENTS.md'],
   rewrites: {
     'README.md': 'index.md',
   },

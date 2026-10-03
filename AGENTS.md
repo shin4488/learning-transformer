@@ -66,7 +66,7 @@ docker compose run --rm build # Docker で本番ビルド
 
 ## Claude Code と Codex
 
-- `AGENTS.md`・`CLAUDE.md` は `.vitepress/config.mts` の `srcExclude` で公開対象から除外する。
+- `AGENTS.md` は `.vitepress/config.mts` の `srcExclude` で公開対象から除外する。
 
 ## 作業の進め方
 
