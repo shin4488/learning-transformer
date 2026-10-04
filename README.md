@@ -43,8 +43,8 @@ graph TD
     C13 --> C16["第16章 まとめと展望"]
     C15 --> C16
 
-    style C8 fill:#fef3c7,stroke:#d97706,stroke-width:2px
-    style C9 fill:#fed7aa,stroke:#ea580c,stroke-width:2px
+    style C8 fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#24292f
+    style C9 fill:#fed7aa,stroke:#ea580c,stroke-width:2px,color:#24292f
 ```
 
 ---
