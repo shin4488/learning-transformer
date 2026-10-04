@@ -69,8 +69,6 @@ Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue`
 4. Custom domains で取得したドメインを割り当てる(同じ Cloudflare アカウント内なので DNS は自動設定)
 5. 以後、main へ push するたびに自動デプロイされる
 
-GitHub Pages 側を止めたい場合は Settings → Pages で無効化する(併存していても害はない)。
-
 ## 3. Google Analytics(GA4)
 
 1. [Google Analytics](https://analytics.google.com/) でアカウントとプロパティを作成(プラットフォーム: ウェブ、サイトURLを入力)
@@ -79,9 +77,9 @@ GitHub Pages 側を止めたい場合は Settings → Pages で無効化する(�
 
 ## 4. Google Search Console(SEO)
 
-1. [Search Console](https://search.google.com/search-console) でプロパティを追加(独自ドメインなら「ドメイン」、GitHub Pages のうちは「URLプレフィックス」で登録)
+1. [Search Console](https://search.google.com/search-console) でプロパティを「ドメイン」で追加
 2. 所有権確認は、GA4 設定済みなら「Google Analytics」経由で自動確認できる
-3. 「サイトマップ」に `sitemap.xml` を送信する(例: `https://shin4488.github.io/learning-transformer/sitemap.xml`)
+3. 「サイトマップ」に `sitemap.xml` を送信する(`https://learning-transformer.com/sitemap.xml`)
 
 ## 5. Google AdSense
 
