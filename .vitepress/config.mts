@@ -16,10 +16,6 @@ const ADSENSE_CLIENT = 'ca-pub-4736370148395141'
 // Google Analytics(GA4)の測定ID
 const GA_ID = 'G-9VXNS22KZ1'
 
-// GitHub Pages(プロジェクトサイト)では DOCS_BASE=/learning-transformer/ を、
-// 独自ドメイン・Cloudflare Pages ではベースパスなし(既定)を使う。
-const base = process.env.DOCS_BASE || '/'
-
 // 各ページの meta description(検索結果・SNSカードに表示される要約)
 const pageDescriptions: Record<string, string> = {
   'index.md': SITE_DESCRIPTION,
@@ -130,7 +126,6 @@ export default defineConfig({
   lang: 'ja-JP',
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
-  base,
   cleanUrls: true,
   lastUpdated: true,
   sitemap: { hostname: `${SITE_URL}/` },
@@ -139,9 +134,9 @@ export default defineConfig({
     'README.md': 'index.md',
   },
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
-    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: `${base}favicon.png` }],
-    ['link', { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' }],
+    ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }],
     ['meta', { name: 'theme-color', content: '#f0b429' }],
     // Mermaid はノード内ラベルの寸法を body 直下(line-height: 24px)で計測してから
     // SVG を記事内に挿入するが、記事内では .vp-doc p { line-height: 28px } が適用されて
