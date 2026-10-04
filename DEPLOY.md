@@ -58,6 +58,8 @@ Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue`
 4. Custom domains で取得したドメインを割り当てる(同じ Cloudflare アカウント内なので DNS は自動設定)
 5. 以後、main へ push するたびに自動デプロイされる
 
+各ページの最終更新日(本文・sitemap・JSON-LD)は、ファイルごとの git の最終コミット日時から作る。Cloudflare のビルドは浅いクローンで行われるため、`npm run build` は Workers Builds 上(環境変数 `WORKERS_CI` が設定される)でだけ全履歴を取得してからビルドする(`scripts/fetch-git-history.mjs`)。取得に失敗してもビルドは続くが、全ページの日付がビルド対象コミットの日時になる。
+
 ## 2. Google Analytics(GA4)
 
 1. [Google Analytics](https://analytics.google.com/) でアカウントとプロパティを作成(プラットフォーム: ウェブ、サイトURLを入力)
