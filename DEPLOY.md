@@ -19,7 +19,7 @@ npm run dev      # http://localhost:5173 でプレビュー
 npm run build    # 本番ビルド(.vitepress/dist に出力)
 ```
 
-PRのCIも `.nvmrc` を読み、サブパス配信とドメイン直下配信の両方でインストール・テスト・ビルドを確認する。CIはデプロイを行わない。Node.jsのメジャー版を変えるときは、`package.json` の対応範囲・型定義と `compose.yaml` のイメージもそろえる。
+PRのCIも `.nvmrc` を読み、インストール・テスト・ビルドを確認する。CIはデプロイを行わない。Node.jsのメジャー版を変えるときは、`package.json` の対応範囲・型定義と `compose.yaml` のイメージもそろえる。
 
 Node をローカルに入れたくない場合は Docker でも動かせる(Node のバージョン差異にも影響されない):
 
@@ -42,46 +42,35 @@ MathJax 4の公式依存経路から、修正版のxmldomを取り込む。解�
 
 Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue` から公式の `render` APIで描画する。古い `vitepress-plugin-mermaid` はMermaid 12と互換性がないため使用しない。本文のMermaidフェンスはGitHubで読める形を維持する。
 
-従来の配置・見た目を維持するため、Dagre配置とclassic表示を明示する。描画はブラウザーで行い、ダークモード変更時に再描画する。Mermaidの設定は描画ごとに直列に適用し、HTMLやリンクの安全性はstrict設定で保つ。依存更新時は `npm test` と両ベースパスでのビルドに加え、フロー図・xychartの表示、画面遷移、テーマ切り替えをブラウザーで確認する。
+従来の配置・見た目を維持するため、Dagre配置とclassic表示を明示する。描画はブラウザーで行い、ダークモード変更時に再描画する。Mermaidの設定は描画ごとに直列に適用し、HTMLやリンクの安全性はstrict設定で保つ。依存更新時は `npm test` とビルドに加え、フロー図・xychartの表示、画面遷移、テーマ切り替えをブラウザーで確認する。
 
-## 1. GitHub Pages(廃止済み)
-
-独自ドメイン(learning-transformer.com)での公開に一本化したため、GitHub Pages は**無効化済み**(`https://shin4488.github.io/learning-transformer/` は 404)。
-
-- デプロイ用ワークフロー `.github/workflows/deploy.yml` は**ファイルとしては残っているが、GitHub 側の設定で実行を無効化してある**(`gh workflow disable deploy.yml` を実行済み)。再開時も `.nvmrc` のNode.jsを使う。
-- リポジトリの Actions タブでは「This workflow was manually disabled」と表示される
-- 再度 GitHub Pages で公開したい場合:
-  1. `gh workflow enable deploy.yml`(または Actions タブのボタン)でワークフローを再有効化
-  2. Settings → Pages → Source を **GitHub Actions** にする
-  3. main に push すると再公開される
-
-## 2. 独自ドメイン + Cloudflare Pages(本公開)
+## 1. 独自ドメイン + Cloudflare Pages(本公開)
 
 1. [Cloudflare](https://dash.cloudflare.com/) にアカウント作成 → 「ドメイン登録」からドメインを取得(原価販売。.com で年約$11)
 2. Cloudflare ダッシュボード → Workers & Pages → 作成 → Git に接続 で `shin4488/learning-transformer` を接続
 3. ビルド設定(新UI・デプロイコマンド欄がある場合):
    - ビルドコマンド: `npm run build`
    - デプロイコマンド: `npx wrangler deploy`(リポジトリの `wrangler.jsonc` が配信対象 `.vitepress/dist` を指定している)
-   - Node.js: リポジトリの `.nvmrc` を使う。既存のビルド環境変数 `NODE_VERSION` がある場合は削除し、ファイルの指定にそろえる。`DOCS_BASE` は設定しない(独自ドメイン直下で公開するため)
+   - Node.js: リポジトリの `.nvmrc` を使う。既存のビルド環境変数 `NODE_VERSION` がある場合は削除し、ファイルの指定にそろえる
 
    旧UI(Pages タブでデプロイコマンド欄がない場合):
    - Build command: `npm run build` / Build output directory: `.vitepress/dist` / 環境変数不要
 4. Custom domains で取得したドメインを割り当てる(同じ Cloudflare アカウント内なので DNS は自動設定)
 5. 以後、main へ push するたびに自動デプロイされる
 
-## 3. Google Analytics(GA4)
+## 2. Google Analytics(GA4)
 
 1. [Google Analytics](https://analytics.google.com/) でアカウントとプロパティを作成(プラットフォーム: ウェブ、サイトURLを入力)
 2. 発行された **測定ID(G-XXXXXXXXXX)** を `.vitepress/config.mts` の `GA_ID` に設定して push
 3. サイトを開き、GA のリアルタイムレポートに自分のアクセスが出れば設定完了
 
-## 4. Google Search Console(SEO)
+## 3. Google Search Console(SEO)
 
 1. [Search Console](https://search.google.com/search-console) でプロパティを「ドメイン」で追加
 2. 所有権確認は、GA4 設定済みなら「Google Analytics」経由で自動確認できる
 3. 「サイトマップ」に `sitemap.xml` を送信する(`https://learning-transformer.com/sitemap.xml`)
 
-## 5. Google AdSense
+## 4. Google AdSense
 
 1. サイトを独自ドメインで公開し、ある程度アクセスできる状態にする
 2. [AdSense](https://adsense.google.com/) でアカウントを開設し、サイト(独自ドメイン)を追加して審査を申請

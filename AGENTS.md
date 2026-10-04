@@ -8,7 +8,7 @@ Transformer解説書『ゼロから理解するTransformer』のリポジトリ�
 - `privacy-policy.md`: AdSense 用のプライバシーポリシー(サイトにのみ意味を持つページ)
 - `.vitepress/config.mts`: サイト設定。サイドバー・SEO・数式変換・AdSense/GAの設定入口。対象章や変更する設定だけを確認する
 - `DEPLOY.md`: 運用手順(ホスティング・ドメイン・AdSense/GA)。サイトには公開されない(srcExclude)
-- 本番は Cloudflare で配信する https://learning-transformer.com/ のみ。`.github/workflows/deploy.yml` は GitHub Pages 用の定義(`DOCS_BASE=/learning-transformer/` でビルド)で、実行は無効化済み。再開手順は `DEPLOY.md` を参照
+- 本番は Cloudflare で配信する https://learning-transformer.com/ のみ。手順は `DEPLOY.md` を参照
 
 ## コマンド
 
