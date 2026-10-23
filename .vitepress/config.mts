@@ -17,9 +17,9 @@ const ADSENSE_CLIENT = 'ca-pub-4736370148395141'
 const GA_ID = 'G-9VXNS22KZ1'
 
 // 各ページの meta description(検索結果・SNSカードに表示される要約)
+// キーは rewrites 後のパスなので、README.md は index.md で指定する。
 const pageDescriptions: Record<string, string> = {
   'index.md': SITE_DESCRIPTION,
-  'README.md': SITE_DESCRIPTION,
   '01-functions-and-symbols.md':
     '関数・指数・対数・Σ記法など、Transformer理解に必要な数学記号の読み方を、文系高校数学レベルから丁寧に解説します。',
   '02-vectors-and-matrices.md':
