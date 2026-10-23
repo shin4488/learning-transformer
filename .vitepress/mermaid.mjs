@@ -11,8 +11,8 @@ export function mermaidMarkdown(md) {
   }
 }
 
-// Mermaid configuration is global. Serialize initialization and rendering so
-// concurrent diagrams and theme changes cannot borrow each other's settings.
+// Mermaid configuration is global.
+// Serialize initialization and rendering so concurrent diagrams and theme changes cannot borrow each other's settings.
 export function createMermaidRenderer(load = () => import('mermaid')) {
   let queue = Promise.resolve()
   let nextId = 0
@@ -22,6 +22,7 @@ export function createMermaidRenderer(load = () => import('mermaid')) {
       mermaid.initialize({
         startOnLoad: false,
         securityLevel: 'strict',
+        // Throw on invalid diagrams instead of drawing Mermaid's error graphic, so MermaidDiagram shows the source.
         suppressErrorRendering: true,
         layout: 'dagre',
         look: 'classic',

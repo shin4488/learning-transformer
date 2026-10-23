@@ -138,9 +138,8 @@ export default defineConfig({
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' }],
     ['link', { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }],
     ['meta', { name: 'theme-color', content: '#f0b429' }],
-    // Mermaid はノード内ラベルの寸法を body 直下(line-height: 24px)で計測してから
-    // SVG を記事内に挿入するが、記事内では .vp-doc p { line-height: 28px } が適用されて
-    // ラベルが計測時より縦に伸び、ノードの枠からはみ出して文字が切れる。
+    // Mermaid はノード内ラベルの寸法を body 直下(line-height: 24px)で計測してから SVG を記事内に挿入する。
+    // 記事内では .vp-doc p { line-height: 28px } が適用されるため、ラベルが計測時より縦に伸び、ノードの枠からはみ出して文字が切れる。
     // 計測時と同じ値(body から継承した 24px)に揃えて、ずれをなくす。
     ['style', {}, '.vp-doc .mermaid p { line-height: inherit; }'],
     ['style', {}, mathjaxStyle],
@@ -241,9 +240,8 @@ export default defineConfig({
     },
   },
   markdown: {
-    // ```math ブロックはビルド時に $$ に変換されるが、検索インデックス作成時は
-    // 変換前のソースが読まれるため、言語 'math' をハイライトなしの言語として
-    // 登録して「The language 'math' is not loaded」警告を抑止する
+    // ```math ブロックはビルド時に $$ に変換されるが、検索インデックス作成時は変換前のソースが読まれる。
+    // そのため言語 'math' をハイライトなしの言語として登録し、「The language 'math' is not loaded」警告を抑止する。
     languages: [mathLanguage],
     config: (md) => {
       md.use(mathjax, mathjaxInstance)

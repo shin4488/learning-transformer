@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """本文の図(images/*.png)を生成するスクリプト。
 
-ASCII図では表現が粗くなる「散布図・ベクトルの矢印・等高線」系の図を、
-matplotlib で正確に描画する。実行には Python 3 + matplotlib が必要。
+ASCII図では表現が粗くなる「散布図・ベクトルの矢印・等高線」系の図を、matplotlib で正確に描画する。
+実行には Python 3 + matplotlib が必要。
 
     python3 scripts/generate-figures.py
 
@@ -193,7 +193,6 @@ def ch04_rent_fit():
 def ch04_overfitting():
     fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.9), sharey=True)
     xs = np.linspace(17, 53, 300)
-    # 左: 良い当てはめ(直線)
     axes[0].scatter(RENT_X, RENT_Y, s=60, color=BLUE, zorder=3)
     axes[0].plot(xs, 0.2 * xs + 4, color=ORANGE, lw=2)
     axes[0].set_title('(1) 良い当てはめ(汎化)', fontsize=11)

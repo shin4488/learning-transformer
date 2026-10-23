@@ -1,8 +1,8 @@
 import { createMathjaxInstance, mathjax } from '@mdit/plugin-mathjax'
 import { MathJaxTexFont } from '@mathjax/mathjax-tex-font/js/svg.js'
 
-// Keep the source readable on GitHub while handing ordinary dollar-delimited
-// TeX to the Markdown renderer. The chapter files themselves stay unchanged.
+// Keep the source readable on GitHub while handing ordinary dollar-delimited TeX to the Markdown renderer.
+// The chapter files themselves stay unchanged.
 export function normalizeGithubMath(code) {
   let out = code.replace(/\$`([^`\n]+?)`\$/g, (_, expr) => `$${expr}$`)
   out = out.replace(/^([ \t]*)```math\s*\n([\s\S]*?)^[ \t]*```[ \t]*$/gm,
@@ -10,9 +10,6 @@ export function normalizeGithubMath(code) {
   return out
 }
 
-// VitePress 1.x bundles markdown-it 14.1; the plugin's 0.26 line supports it.
-// Revisit the Dependabot constraint when the bundled parser changes.
-// MathJax 4 resolves patched xmldom through its own dependencies.
 export const mathjaxInstance = await createMathjaxInstance({
   output: 'svg',
   a11y: true,
@@ -35,7 +32,7 @@ export const mathjaxInstance = await createMathjaxInstance({
   },
 })
 
-// SVG needs only the common layout and assistive-MathML styles. Keep these
-// in every page's head, including pages reached through client navigation.
+// SVG needs only the common layout and assistive-MathML styles.
+// Keep these in every page's head, including pages reached through client navigation.
 export const mathjaxStyle = await mathjaxInstance.outputStyle()
 export { mathjax }

@@ -51,8 +51,8 @@ test('ships the assistive MathML and SVG layout styles without a font CDN', () =
   assert.doesNotMatch(mathjaxStyle, /https?:\/\//)
 })
 
-// Exercise the actual XML parser reached through MathJax's upstream dependency
-// chain. A vulnerable EntityReference must fail before it can inject markup.
+// Exercise the actual XML parser reached through MathJax's upstream dependency chain.
+// A vulnerable EntityReference must fail before it can inject markup.
 const fromMathjax = createRequire(import.meta.resolve('@mathjax/src/package.json'))
 const fromSpeech = createRequire(fromMathjax.resolve('speech-rule-engine/package.json'))
 const { DOMImplementation, XMLSerializer } = fromSpeech('@xmldom/xmldom')

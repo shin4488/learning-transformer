@@ -26,6 +26,7 @@ async function draw() {
   }
 }
 
+// Start after mount: Mermaid needs the browser DOM, and mounted hooks do not run during SSR.
 onMounted(() => {
   stop = watch([source, theme], draw, { immediate: true })
 })
