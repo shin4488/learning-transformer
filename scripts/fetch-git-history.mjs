@@ -1,8 +1,6 @@
-// 各ページの最終更新日(本文の「最終更新」・sitemap の lastmod・JSON-LD の dateModified)は、
-// VitePress が git log で調べたファイルごとの最終コミット日時から作られる。
-// Cloudflare Workers Builds はリポジトリを浅くクローンするため、そのままでは全ページが
-// ビルド対象コミットの日時になる。Cloudflare のビルド(WORKERS_CI が設定される)で
-// 浅いクローンのときだけ全履歴を取得する。ローカルと GitHub Actions の CI では何もしない。
+// 各ページの最終更新日(本文の「最終更新」・sitemap の lastmod・JSON-LD の dateModified)は、VitePress が git log で調べたファイルごとの最終コミット日時から作られる。
+// Cloudflare Workers Builds はリポジトリを浅くクローンするため、そのままでは全ページがビルド対象コミットの日時になる。
+// Cloudflare のビルド(WORKERS_CI が設定される)で浅いクローンのときだけ全履歴を取得する。ローカルと GitHub Actions の CI では何もしない。
 // 取得できなくてもビルドは止めず、警告を出して続ける。
 import { execFileSync } from 'node:child_process'
 

@@ -5,17 +5,18 @@ Transformer解説書『ゼロから理解するTransformer』のリポジトリ�
 ## 構成
 
 - `README.md`, `[0-9][0-9]-*.md`: 書籍本体。**GitHub 上でもそのまま読める記法を維持する**(下記の記法規約を参照)
-- `privacy-policy.md`: AdSense 用のプライバシーポリシー(サイトにのみ意味を持つページ)
+- `about.md`, `contact.md`, `changelog.md`, `privacy-policy.md`: サイト情報のページ(サイトにのみ意味を持つ)。`privacy-policy.md` は AdSense 用のプライバシーポリシー
 - `.vitepress/config.mts`: サイト設定。サイドバー・SEO・数式変換・AdSense/GAの設定入口。対象章や変更する設定だけを確認する
-- `DEPLOY.md`: 運用手順(ホスティング・ドメイン・AdSense/GA)。サイトには公開されない(srcExclude)
+- `DEPLOY.md`: 運用手順(ホスティング・ドメイン・AdSense/GA)
+- `AGENTS.md` と `DEPLOY.md` は `.vitepress/config.mts` の `srcExclude` でサイトの公開対象から除外する
 - 本番は Cloudflare で配信する https://learning-transformer.com/ のみ。手順は `DEPLOY.md` を参照
 
 ## コマンド
 
 ```sh
-npm run dev      # 開発サーバ（環境はpackage・Docker定義を確認）
+npm run dev      # 開発サーバ(http://localhost:5173)。Node.js は .nvmrc の版を使う
 npm run build    # 本番ビルド → .vitepress/dist
-npm test         # 数式描画・アクセシビリティ・XML注入の回帰テスト
+npm test         # 数式・図の描画、アクセシビリティ、注入防止の回帰テスト
 docker compose up             # Docker で開発サーバ(http://localhost:5173)
 docker compose run --rm build # Docker で本番ビルド
 ```
@@ -39,7 +40,7 @@ docker compose run --rm build # Docker で本番ビルド
 ### 図
 
 - 構成図・フロー図: Mermaid `graph TD` / `flowchart TD`(向きは上から下に統一)。ノードラベルは `["..."]` とダブルクォートで囲む
-  - **例外**: 「入力 → 変換 → 出力」というデータの流れ自体が主題で、横に読み下す方が自然な少ノードの図は `graph LR` を維持してよい。例えば第1章の関数の直列つなぎ(1.9.1)、第3章の言語モデルの入出力(3.9.2)の2つ。TD への機械的な統一で書き換えないこと
+  - **例外**: 「入力 → 変換 → 出力」というデータの流れ自体が主題で、横に読み下す方が自然な少ノードの図は `graph LR` を維持してよい。例えば第1章の関数の直列つなぎ(1.9.1)、第3章の言語モデルの入出力(3.9.2)。TD への機械的な統一で書き換えないこと
 - 関数グラフ・棒グラフ: Mermaid `xychart-beta`(値は必ず正しく計算する。凡例が無いのでキャプションで系列を説明)
 - `quadrantChart` は GitHub でエラーになるため**使用禁止**
 - 散布図・ベクトルの矢印・等高線など Mermaid で表現できない図は、`scripts/generate-figures.py`(matplotlib)で `images/*.png` を生成して `![alt](images/xxx.png)` で埋め込む。数値は本文の手計算例と一致させ、色や矢印の意味はキャプションで説明する
@@ -63,10 +64,6 @@ docker compose run --rm build # Docker で本番ビルド
 - 書籍の数式や記法を修正した場合は GitHub の Markdown API(`https://api.github.com/markdown`)にファイルを POST し、`math-renderer` 以外に生の `$` が残っていないかを確認すると、数式の描画崩れを機械的に検出できる
 - 書籍本文・公開ページ・サイト設定の変更は `npm run build` で確認する（リンク切れも検出する）。公開対象外の指示だけの変更はリンクと記法を確認する。
 - 数式描画は `.vitepress/math.mjs` の構成を使う。依存や設定の変更時は `npm test` も実行する。PRのCIが使う実行環境・検証内容は `.github/workflows/` を正とする。
-
-## Claude Code と Codex
-
-- `AGENTS.md` は `.vitepress/config.mts` の `srcExclude` で公開対象から除外する。
 
 ## 作業の進め方
 

@@ -5,7 +5,7 @@
 ## 構成
 
 - 章の Markdown(`01-*.md`〜`16-*.md`, `README.md`)は GitHub 上でもそのまま読める形を維持
-- サイト化は [VitePress](https://vitepress.dev/) で行う。GitHub 固有の数式記法($`...`$ と ```math)は、ビルド時に `.vitepress/config.mts` 内のプラグインが標準記法へ変換する(md ファイル自体は書き換えない)
+- サイト化は [VitePress](https://vitepress.dev/) で行う。GitHub 固有の数式記法(`` $`...`$ `` と ```` ```math ```` フェンス)は、ビルド時に `.vitepress/math.mjs` の処理で標準記法へ変換する(md ファイル自体は書き換えない)
 - 数式は MathJax、図は Mermaid で描画
 
 ## ローカルでの確認
@@ -34,7 +34,7 @@ docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 
 VitePress 1.xにはmarkdown-it 14.1が組み込まれているため、対応するプラグイン0.26系を使う。プラグイン1.0〜1.1系はmarkdown-it 14.2以上、1.2系は15系を要求するため、Node.jsだけを更新しても組み合わせの条件を満たせない。VitePress側が対応するまでは `.github/dependabot.yml` で1.x以降の更新を保留する。VitePress更新時には、この制限も見直す。
 
-MathJax 4の公式依存経路から、修正版のxmldomを取り込む。解決済みバージョンは `package-lock.json`、XML注入を防ぐ回帰テストは `tests/math.test.mjs` で確認する。`overrides` は不要。
+MathJax 4の公式依存経路から、修正版のxmldomを取り込む。解決済みバージョンは `package-lock.json`、XML注入を防ぐ回帰テストは `tests/math.test.mjs` で確認する。xmldomに `overrides` は不要。
 
 旧 `markdown-it-mathjax3` / `mathjax-full` は使用しない。旧経路のspeech-rule-engine 4.1.4は脆弱なxmldom 0.9.10を固定しているため、戻すと問題が再発する。数式プラグインを更新するときは `npm ci` と `npm test`、全ページのビルドを確認し、SVGの表示と読み上げ用MathMLも比較する。
 
@@ -44,17 +44,18 @@ Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue`
 
 従来の配置・見た目を維持するため、Dagre配置とclassic表示を明示する。描画はブラウザーで行い、ダークモード変更時に再描画する。Mermaidの設定は描画ごとに直列に適用し、HTMLやリンクの安全性はstrict設定で保つ。依存更新時は `npm test` とビルドに加え、フロー図・xychartの表示、画面遷移、テーマ切り替えをブラウザーで確認する。
 
-## 1. 独自ドメイン + Cloudflare Pages(本公開)
+### Viteのバージョン
+
+VitePress 1.xが指定するVite 5系の開発サーバーとesbuildの脆弱性を避けるため、`package.json` の `overrides` でVite 6系を使う。Vite 6系はVitePress 1.xが指定する依存範囲の外にあるため、VitePressを更新するときはこの `overrides` が必要かを見直す。
+
+## 1. 独自ドメイン + Cloudflare
 
 1. [Cloudflare](https://dash.cloudflare.com/) にアカウント作成 → 「ドメイン登録」からドメインを取得(原価販売。.com で年約$11)
 2. Cloudflare ダッシュボード → Workers & Pages → 作成 → Git に接続 で `shin4488/learning-transformer` を接続
-3. ビルド設定(新UI・デプロイコマンド欄がある場合):
+3. ビルド設定:
    - ビルドコマンド: `npm run build`
    - デプロイコマンド: `npx wrangler deploy`(リポジトリの `wrangler.jsonc` が配信対象 `.vitepress/dist` を指定している)
    - Node.js: リポジトリの `.nvmrc` を使う。既存のビルド環境変数 `NODE_VERSION` がある場合は削除し、ファイルの指定にそろえる
-
-   旧UI(Pages タブでデプロイコマンド欄がない場合):
-   - Build command: `npm run build` / Build output directory: `.vitepress/dist` / 環境変数不要
 4. Custom domains で取得したドメインを割り当てる(同じ Cloudflare アカウント内なので DNS は自動設定)
 5. 以後、main へ push するたびに自動デプロイされる
 
@@ -69,7 +70,7 @@ Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue`
 ## 3. Google Search Console(SEO)
 
 1. [Search Console](https://search.google.com/search-console) でプロパティを「ドメイン」で追加
-2. 所有権確認は、GA4 設定済みなら「Google Analytics」経由で自動確認できる
+2. 所有権は DNS の TXT レコードで確認する。Search Console に表示されるレコードを Cloudflare の DNS に追加する(Google Analytics 経由の確認は URL プレフィックスのプロパティでしか使えない)
 3. 「サイトマップ」に `sitemap.xml` を送信する(`https://learning-transformer.com/sitemap.xml`)
 
 ## 4. Google AdSense
@@ -85,5 +86,4 @@ Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue`
 
 ## 注意
 
-- AdSense は `*.github.io` のような共有サブドメインでは審査に通らないため、広告は独自ドメイン公開後に有効化する
-- サイトのタイトル・説明文(検索結果に出る文言)は `.vitepress/config.mts` の `title` / `description` で変更できる
+- サイトのタイトル・説明文(検索結果に出る文言)は `.vitepress/config.mts` の `SITE_TITLE` / `SITE_DESCRIPTION` で変更できる。ページごとの説明文は `pageDescriptions` で指定する

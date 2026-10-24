@@ -1,6 +1,5 @@
 // Cloudflare(Workers Static Assets)へのデプロイ設定。
-// ダッシュボードの「デプロイコマンド」に `npx wrangler deploy` を指定すると、
-// このファイルの設定で .vitepress/dist が静的サイトとして配信される。
+// ダッシュボードの「デプロイコマンド」に `npx wrangler deploy` を指定すると、このファイルの設定で .vitepress/dist が静的サイトとして配信される。
 {
   "name": "learning-transformer",
   "compatibility_date": "2026-07-01",

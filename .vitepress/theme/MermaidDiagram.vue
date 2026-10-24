@@ -4,9 +4,9 @@ import { useData } from 'vitepress'
 import { renderMermaid } from '../mermaid.mjs'
 
 const props = defineProps({ graph: { type: String, required: true } })
-const { isDark, frontmatter } = useData()
+const { isDark } = useData()
 const source = computed(() => decodeURIComponent(props.graph))
-const theme = computed(() => frontmatter.value.mermaidTheme || (isDark.value ? 'dark' : 'default'))
+const theme = computed(() => isDark.value ? 'dark' : 'default')
 const svg = ref('')
 const failed = ref(false)
 let revision = 0
@@ -26,6 +26,7 @@ async function draw() {
   }
 }
 
+// Start after mount: Mermaid needs the browser DOM, and mounted hooks do not run during SSR.
 onMounted(() => {
   stop = watch([source, theme], draw, { immediate: true })
 })

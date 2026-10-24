@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """本文の図(images/*.png)を生成するスクリプト。
 
-ASCII図では表現が粗くなる「散布図・ベクトルの矢印・等高線」系の図を、
-matplotlib で正確に描画する。実行には Python 3 + matplotlib が必要。
+ASCII図では表現が粗くなる「散布図・ベクトルの矢印・等高線」系の図を、matplotlib で正確に描画する。
+実行には Python 3 + matplotlib が必要。
 
     python3 scripts/generate-figures.py
 
