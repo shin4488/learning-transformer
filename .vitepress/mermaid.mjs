@@ -22,7 +22,7 @@ export function createMermaidRenderer(load = () => import('mermaid')) {
       mermaid.initialize({
         startOnLoad: false,
         securityLevel: 'strict',
-        // Throw on invalid diagrams instead of drawing Mermaid's error graphic, so MermaidDiagram shows the source.
+        // Without this, a failed render() leaves Mermaid's error graphic in a temporary element under document.body. render() rejects with or without it.
         suppressErrorRendering: true,
         layout: 'dagre',
         look: 'classic',

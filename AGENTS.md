@@ -14,7 +14,7 @@ Transformer解説書『ゼロから理解するTransformer』のリポジトリ�
 ## コマンド
 
 ```sh
-npm run dev      # 開発サーバ（環境はpackage・Docker定義を確認）
+npm run dev      # 開発サーバ(http://localhost:5173)。Node.js は .nvmrc の版を使う
 npm run build    # 本番ビルド → .vitepress/dist
 npm test         # 数式・図の描画、アクセシビリティ、注入防止の回帰テスト
 docker compose up             # Docker で開発サーバ(http://localhost:5173)

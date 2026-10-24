@@ -44,21 +44,18 @@ Mermaid 12は `.vitepress/mermaid.mjs` と `.vitepress/theme/MermaidDiagram.vue`
 
 従来の配置・見た目を維持するため、Dagre配置とclassic表示を明示する。描画はブラウザーで行い、ダークモード変更時に再描画する。Mermaidの設定は描画ごとに直列に適用し、HTMLやリンクの安全性はstrict設定で保つ。依存更新時は `npm test` とビルドに加え、フロー図・xychartの表示、画面遷移、テーマ切り替えをブラウザーで確認する。
 
-### Viteのoverride
+### Viteのバージョン
 
-VitePress 1.xが指定するVite 5系の開発サーバーとesbuildの脆弱性を避けるため、`package.json` の `overrides` でVite 6系を使う。VitePressの依存範囲の外にあるため、VitePressを更新するときはoverrideが必要かを見直す。
+VitePress 1.xが指定するVite 5系の開発サーバーとesbuildの脆弱性を避けるため、`package.json` の `overrides` でVite 6系を使う。Vite 6系はVitePress 1.xが指定する依存範囲の外にあるため、VitePressを更新するときはこの `overrides` が必要かを見直す。
 
 ## 1. 独自ドメイン + Cloudflare
 
 1. [Cloudflare](https://dash.cloudflare.com/) にアカウント作成 → 「ドメイン登録」からドメインを取得(原価販売。.com で年約$11)
 2. Cloudflare ダッシュボード → Workers & Pages → 作成 → Git に接続 で `shin4488/learning-transformer` を接続
-3. ビルド設定(新UI・デプロイコマンド欄がある場合):
+3. ビルド設定:
    - ビルドコマンド: `npm run build`
    - デプロイコマンド: `npx wrangler deploy`(リポジトリの `wrangler.jsonc` が配信対象 `.vitepress/dist` を指定している)
    - Node.js: リポジトリの `.nvmrc` を使う。既存のビルド環境変数 `NODE_VERSION` がある場合は削除し、ファイルの指定にそろえる
-
-   旧UI(Pages タブでデプロイコマンド欄がない場合):
-   - Build command: `npm run build` / Build output directory: `.vitepress/dist` / 環境変数不要
 4. Custom domains で取得したドメインを割り当てる(同じ Cloudflare アカウント内なので DNS は自動設定)
 5. 以後、main へ push するたびに自動デプロイされる
 
@@ -73,7 +70,7 @@ VitePress 1.xが指定するVite 5系の開発サーバーとesbuildの脆弱性
 ## 3. Google Search Console(SEO)
 
 1. [Search Console](https://search.google.com/search-console) でプロパティを「ドメイン」で追加
-2. 所有権確認は、GA4 設定済みなら「Google Analytics」経由で自動確認できる
+2. 所有権は DNS の TXT レコードで確認する。Search Console に表示されるレコードを Cloudflare の DNS に追加する(Google Analytics 経由の確認は URL プレフィックスのプロパティでしか使えない)
 3. 「サイトマップ」に `sitemap.xml` を送信する(`https://learning-transformer.com/sitemap.xml`)
 
 ## 4. Google AdSense
@@ -89,5 +86,4 @@ VitePress 1.xが指定するVite 5系の開発サーバーとesbuildの脆弱性
 
 ## 注意
 
-- AdSense は `*.github.io` のような共有サブドメインでは審査に通らないため、広告は独自ドメイン公開後に有効化する
 - サイトのタイトル・説明文(検索結果に出る文言)は `.vitepress/config.mts` の `SITE_TITLE` / `SITE_DESCRIPTION` で変更できる。ページごとの説明文は `pageDescriptions` で指定する
