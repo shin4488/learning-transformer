@@ -32,15 +32,15 @@ async function renderPage(html) {
     },
   }
   const page = await renderToString(createSSRApp({ template: html, components: { MermaidDiagram } }))
-  // Vue marks fragments and empty components with comments, which are not page content.
-  return { content: page.replace(/<!--[\s\S]*?-->/g, ''), diagrams }
+  return { page, diagrams }
 }
 
 test('passes a Mermaid fence to one diagram component without letting its source inject HTML or Vue syntax', async () => {
   const source = `graph TD\nA["<script>alert('x')</script> & {{ value }}"] --> B["日本語"]\n`
-  const { content, diagrams } = await renderPage(md.render('```mermaid\n' + source + '```'))
+  const { page, diagrams } = await renderPage(md.render('```mermaid\n' + source + '```'))
   assert.deepEqual(diagrams, [{ source, attrs: {} }])
-  assert.equal(content, '')
+  // Vue marks fragments and empty components with comments, which are not page content.
+  assert.match(page, /^(?:<!--[^<>]*-->)*$/)
 })
 
 test('treats an mmd fence the same as a mermaid fence', () => {
