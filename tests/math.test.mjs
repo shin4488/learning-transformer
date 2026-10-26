@@ -6,8 +6,20 @@ import {
   mathjax, mathjaxInstance, mathjaxStyle, normalizeGithubMath,
 } from '../.vitepress/math.mjs'
 
+const plainText = [
+  ['escaped dollar', '\\$5'],
+  ['currency followed by a number', '$5 and $10'],
+  ['unclosed delimiter', 'price $5'],
+  ['inline code', '`$x$`'],
+  ['ordinary code fence', '```text\n$x$\n```'],
+]
+// VitePress keeps one renderer per process, so record its output before the math plugin is added.
+const withoutMath = new Map()
 const md = await createMarkdownRenderer(process.cwd(), {
-  config: (renderer) => renderer.use(mathjax, mathjaxInstance),
+  config: (renderer) => {
+    for (const [, source] of plainText) withoutMath.set(source, renderer.render(source))
+    renderer.use(mathjax, mathjaxInstance)
+  },
 })
 const render = (source) => md.render(normalizeGithubMath(source))
 
@@ -33,15 +45,9 @@ for (const [name, source, expectedMathml, display] of [
   })
 }
 
-for (const [name, source] of [
-  ['escaped dollar', '\\$5'],
-  ['currency followed by a number', '$5 and $10'],
-  ['unclosed delimiter', 'price $5'],
-  ['inline code', '`$x$`'],
-  ['ordinary code fence', '```text\n$x$\n```'],
-]) {
-  test(`keeps ${name} as text`, () => {
-    assert.doesNotMatch(render(source), /<mjx-container\b/)
+for (const [name, source] of plainText) {
+  test(`keeps ${name} as text, rendered the same as without math support`, () => {
+    assert.equal(render(source), withoutMath.get(source))
   })
 }
 
