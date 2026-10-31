@@ -27,6 +27,8 @@ export function createMermaidRenderer(load = () => import('mermaid')) {
         layout: 'dagre',
         look: 'classic',
         theme,
+        // The light theme's xychart palette starts with near-white colors, which leave lines and bars almost invisible on the white chart background.
+        ...(theme === 'default' ? { themeVariables: { xyChart: { plotColorPalette: '#1f6feb,#e36209,#1a7f37,#cf222e,#57606a' } } } : {}),
       })
       return mermaid.render(`book-diagram-${++nextId}`, graph)
     })
