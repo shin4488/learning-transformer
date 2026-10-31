@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readdir, readFile } from 'node:fs/promises'
 import test from 'node:test'
 import { createMarkdownRenderer } from 'vitepress'
 import { createSSRApp } from 'vue'
@@ -108,4 +109,48 @@ test('a malformed diagram does not prevent subsequent diagrams from rendering', 
   const valid = render('valid', 'default')
   await assert.rejects(invalid, /Parse error/)
   assert.equal((await valid).svg, '<svg>valid</svg>')
+})
+
+// The most series any xychart in the book draws, counted from the chapter sources.
+async function seriesPerChart() {
+  const chapters = (await readdir(process.cwd())).filter(name => /^\d{2}-.*\.md$/.test(name))
+  let most = 0
+  for (const chapter of chapters) {
+    const source = await readFile(chapter, 'utf8')
+    for (const [, chart] of source.matchAll(/```mermaid\nxychart-beta\n([\s\S]*?)```/g)) {
+      most = Math.max(most, chart.match(/^\s*(?:line|bar)\b/gm)?.length ?? 0)
+    }
+  }
+  return most
+}
+
+// WCAG relative luminance and contrast ratio. Graphical objects need 3:1 against adjacent colors (WCAG 2.1, 1.4.11).
+function contrast(a, b) {
+  const luminance = (color) => {
+    const hex = { white: 'ffffff' }[color] ?? color.replace('#', '')
+    const full = hex.length === 3 ? [...hex].map(c => c + c).join('') : hex
+    const [r, g, b] = [0, 2, 4].map(i => parseInt(full.slice(i, i + 2), 16) / 255)
+      .map(c => c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+  }
+  const [lighter, darker] = [luminance(a), luminance(b)].sort((x, y) => y - x)
+  return (lighter + 0.05) / (darker + 0.05)
+}
+
+test('draws every series of the book\'s xy charts in a color that stands out from the chart background in both themes', async () => {
+  const series = await seriesPerChart()
+  assert.ok(series >= 1)
+  // Read the colors the real Mermaid resolves for each render. Drawing itself needs a browser, so it is skipped.
+  const { default: mermaid } = await import('mermaid')
+  const render = createMermaidRenderer(async () => ({ default: {
+    initialize: (config) => mermaid.initialize(config),
+    async render() { return mermaid.mermaidAPI.getConfig().themeVariables.xyChart },
+  } }))
+  // Ending with the light theme again covers a theme change after a dark render.
+  for (const theme of ['default', 'dark', 'default']) {
+    const { backgroundColor, plotColorPalette } = await render('xychart-beta', theme)
+    for (const color of plotColorPalette.split(',').slice(0, series)) {
+      assert.ok(contrast(color, backgroundColor) >= 3, `${theme}: ${color} on ${backgroundColor}`)
+    }
+  }
 })
