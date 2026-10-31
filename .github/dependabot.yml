@@ -5,16 +5,16 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
   # npm 依存(VitePress等)の更新。通知が多くなりすぎないよう月1回・まとめてPR
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 7
     ignore:
-      # VitePress 1.x bundles markdown-it 14.1; plugin 1.x requires 14.2/15.
-      # Revisit this constraint when VitePress upgrades its bundled parser.
-      - dependency-name: "@mdit/plugin-mathjax"
-        versions: [">=1.0.0"]
       # Match the supported Node.js major; review runtime upgrades together.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
