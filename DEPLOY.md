@@ -32,11 +32,11 @@ docker compose run --rm build # 本番ビルド(.vitepress/dist に出力)
 
 数式は `@mdit/plugin-mathjax` とMathJax 4でビルド時にSVGへ変換する。従来のTeXフォントと読み上げ用MathMLを維持し、ブラウザーでMathJaxやフォントCDNを読み込む必要はない。設定は `.vitepress/math.mjs` にある。
 
-VitePress 1.xにはmarkdown-it 14.1が組み込まれているため、対応するプラグイン0.26系を使う。プラグイン1.0〜1.1系はmarkdown-it 14.2以上、1.2系は15系を要求するため、Node.jsだけを更新しても組み合わせの条件を満たせない。VitePress側が対応するまでは `.github/dependabot.yml` で1.x以降の更新を保留する。VitePress更新時には、この制限も見直す。
+VitePress 1.xにはmarkdown-it 14.1が組み込まれており、プラグインはこの組み込みのmarkdown-itに登録される。プラグイン1.2系はmarkdown-it 15系を対応先として宣言しているが、省略可能な依存の宣言なのでインストール時には検査されない。組み合わせて使えるかは、下記の更新時の確認で判断する。
 
 MathJax 4の公式依存経路から、修正版のxmldomを取り込む。解決済みバージョンは `package-lock.json`、XML注入を防ぐ回帰テストは `tests/math.test.mjs` で確認する。xmldomに `overrides` は不要。
 
-旧 `markdown-it-mathjax3` / `mathjax-full` は使用しない。旧経路のspeech-rule-engine 4.1.4は脆弱なxmldom 0.9.10を固定しているため、戻すと問題が再発する。数式プラグインを更新するときは `npm ci` と `npm test`、全ページのビルドを確認し、SVGの表示と読み上げ用MathMLも比較する。
+旧 `markdown-it-mathjax3` / `mathjax-full` は使用しない。旧経路のspeech-rule-engine 4.1.4は脆弱なxmldom 0.9.10を固定しているため、戻すと問題が再発する。数式プラグインやVitePressを更新するときは `npm ci` と `npm test` を実行し、更新前後の全ページのビルド結果で、数式の出力(`mjx-container` 要素。SVGと読み上げ用MathMLを含む)が一致することを確かめる。
 
 ### Mermaidの描画
 
